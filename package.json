@@ -1,0 +1,13 @@
+{
+  "name": "godavari-whatsapp-server",
+  "version": "1.0.0",
+  "description": "WPPConnect WhatsApp server for Godavari Building Materials",
+  "main": "whatsapp-server.js",
+  "scripts": {
+    "start": "node whatsapp-server.js",
+    "logs": "node log-server.js"
+  },
+  "dependencies": {
+    "@wppconnect-team/wppconnect": "^1.32.0"
+  }
+}

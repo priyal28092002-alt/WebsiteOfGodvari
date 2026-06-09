@@ -1,0 +1,169 @@
+<!-- ===== LOGIN / REGISTER ===== -->
+<div *ngIf="currentView === 'login' || currentView === 'register'">
+  <div style="background:#131921; padding:12px 20px; display:flex; align-items:center; gap:20px;">
+    <span style="color:#ff9900; font-size:24px; font-weight:bold;">🛒 ShopZone</span>
+  </div>
+
+  <div style="min-height:100vh; background:#f3f3f3; display:flex; align-items:center; justify-content:center;">
+    <div style="background:white; padding:30px; border-radius:8px; width:350px; box-shadow:0 2px 8px rgba(0,0,0,0.15);">
+
+      <div style="display:flex; margin-bottom:20px; border-bottom:2px solid #f3f3f3;">
+        <button (click)="showLogin()" [style.border-bottom]="currentView==='login' ? '2px solid #ff9900' : 'none'"
+          style="flex:1; padding:10px; background:none; border:none; cursor:pointer; font-size:15px; font-weight:600;">Sign In</button>
+        <button (click)="showRegister()" [style.border-bottom]="currentView==='register' ? '2px solid #ff9900' : 'none'"
+          style="flex:1; padding:10px; background:none; border:none; cursor:pointer; font-size:15px; font-weight:600;">Register</button>
+      </div>
+
+      <!-- Login -->
+      <div *ngIf="currentView === 'login'">
+        <input [(ngModel)]="loginData.email" placeholder="Email" type="email"
+          style="width:100%; padding:10px; margin-bottom:12px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
+        <input [(ngModel)]="loginData.password" placeholder="Password" type="password"
+          style="width:100%; padding:10px; margin-bottom:16px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
+        <button (click)="login()"
+          style="width:100%; padding:10px; background:#ff9900; border:none; border-radius:4px; font-size:15px; font-weight:600; cursor:pointer;">
+          Sign In
+        </button>
+        <p *ngIf="loginMessage" [style.color]="loginSuccess ? 'gr   een' : 'red'" style="margin-top:12px; text-align:center;">
+          {{loginMessage}}
+        </p>
+      </div>
+
+      <!-- Register -->
+      <div *ngIf="currentView === 'register'">
+        <input [(ngModel)]="registerData.name" placeholder="Full Name"
+          style="width:100%; padding:10px; margin-bottom:12px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
+        <input [(ngModel)]="registerData.email" placeholder="Email" type="email"
+          style="width:100%; padding:10px; margin-bottom:12px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
+        <input [(ngModel)]="registerData.password" placeholder="Password" type="password"
+          style="width:100%; padding:10px; margin-bottom:16px; border:1px solid #ccc; border-radius:4px; box-sizing:border-box;">
+        <button (click)="register()"
+          style="width:100%; padding:10px; background:#ff9900; border:none; border-radius:4px; font-size:15px; font-weight:600; cursor:pointer;">
+          Create Account
+        </button>
+        <p *ngIf="registerMessage" [style.color]="registerSuccess ? 'green' : 'red'" style="margin-top:12px; text-align:center;">
+          {{registerMessage}}
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== PRODUCTS PAGE ===== -->
+<div *ngIf="currentView === 'products'" style="min-height:100vh; background:#f3f3f3;">
+
+  <!-- Navbar -->
+  <div style="background:#131921; padding:10px 20px; display:flex; align-items:center; gap:16px; position:sticky; top:0; z-index:100;">
+    <span style="color:#ff9900; font-size:22px; font-weight:bold; white-space:nowrap;">🛒 ShopZone</span>
+
+    <!-- Search Bar -->
+    <div style="flex:1; display:flex; max-width:700px;">
+      <input [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" placeholder="Search products..."
+        style="flex:1; padding:10px 14px; font-size:15px; border:none; border-radius:4px 0 0 4px; outline:none;">
+      <button (click)="onSearch()"
+        style="padding:10px 18px; background:#ff9900; border:none; border-radius:0 4px 4px 0; cursor:pointer; font-size:18px;">🔍</button>
+    </div>
+
+    <button (click)="logout()"
+      style="margin-left:auto; padding:8px 16px; background:#ff9900; border:none; border-radius:4px; cursor:pointer; font-weight:600; white-space:nowrap;">
+      Sign Out
+    </button>
+  </div>
+
+  <!-- Category Bar -->
+  <div style="background:#232f3e; padding:8px 20px; display:flex; gap:8px; overflow-x:auto;">
+    <button *ngFor="let cat of categories" (click)="selectCategory(cat)"
+      [style.background]="selectedCategory === cat ? '#ff9900' : 'transparent'"
+      [style.color]="selectedCategory === cat ? '#131921' : 'white'"
+      style="padding:6px 16px; border:1px solid rgba(255,255,255,0.3); border-radius:20px; cursor:pointer; white-space:nowrap; font-size:13px; font-weight:500;">
+      {{cat}}
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loadingProducts" style="text-align:center; padding:60px; font-size:18px; color:#555;">
+    Loading products...
+  </div>
+
+  <!-- Product Grid -->
+  <div *ngIf="!loadingProducts" style="padding:20px; max-width:1400px; margin:0 auto;">
+    <p style="color:#555; margin-bottom:16px; font-size:14px;">
+      {{filteredProducts.length}} results for <strong>"{{selectedCategory}}"</strong>
+    </p>
+
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(220px, 1fr)); gap:16px;">
+      <div *ngFor="let product of filteredProducts" (click)="openProduct(product)"
+        style="background:white; border-radius:8px; overflow:hidden; cursor:pointer; box-shadow:0 1px 4px rgba(0,0,0,0.1); transition:box-shadow 0.2s;"
+        onmouseover="this.style.boxShadow='0 4px 16px rgba(0,0,0,0.2)'"
+        onmouseout="this.style.boxShadow='0 1px 4px rgba(0,0,0,0.1)'">
+
+        <img [src]="product.imageUrl" [alt]="product.name"
+          style="width:100%; height:200px; object-fit:cover; background:#f5f5f5;"
+          onerror="this.src='https://via.placeholder.com/400x200?text=No+Image'">
+
+        <div style="padding:12px;">
+          <p style="margin:0 0 4px; font-size:14px; font-weight:500; color:#0f1111; line-height:1.4;
+            display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
+            {{product.name}}
+          </p>
+          <div style="color:#ff9900; font-size:14px; margin:4px 0;">
+            {{getStars(product.rating)}}
+            <span style="color:#555; font-size:12px;">({{product.reviewCount | number}})</span>
+          </div>
+          <p style="margin:6px 0 0; font-size:20px; font-weight:700; color:#0f1111;">
+            ${{product.price | number:'1.2-2'}}
+          </p>
+          <span style="font-size:12px; color:#007600; font-weight:500;">✓ In Stock</span>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="filteredProducts.length === 0" style="text-align:center; padding:60px; color:#555;">
+      <p style="font-size:20px;">No products found.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PRODUCT DETAIL MODAL ===== -->
+<div *ngIf="selectedProduct"
+  style="position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:200; display:flex; align-items:center; justify-content:center; padding:20px;"
+  (click)="closeProduct()">
+
+  <div style="background:white; border-radius:10px; max-width:700px; width:100%; max-height:90vh; overflow-y:auto;"
+    (click)="$event.stopPropagation()">
+
+    <div style="display:flex; gap:24px; padding:24px; flex-wrap:wrap;">
+      <img [src]="selectedProduct.imageUrl" [alt]="selectedProduct.name"
+        style="width:280px; height:280px; object-fit:cover; border-radius:8px; background:#f5f5f5; flex-shrink:0;"
+        onerror="this.src='https://via.placeholder.com/280x280?text=No+Image'">
+
+      <div style="flex:1; min-width:200px;">
+        <button (click)="closeProduct()"
+          style="float:right; background:none; border:none; font-size:22px; cursor:pointer; color:#555;">✕</button>
+        <span style="background:#ff9900; color:#131921; padding:3px 10px; border-radius:12px; font-size:12px; font-weight:600;">
+          {{selectedProduct.category}}
+        </span>
+        <h2 style="margin:12px 0 8px; font-size:20px; color:#0f1111;">{{selectedProduct.name}}</h2>
+        <div style="color:#ff9900; font-size:16px; margin-bottom:8px;">
+          {{getStars(selectedProduct.rating)}}
+          <span style="color:#555; font-size:13px;"> {{selectedProduct.reviewCount | number}} ratings</span>
+        </div>
+        <hr style="border:none; border-top:1px solid #eee; margin:12px 0;">
+        <p style="font-size:28px; font-weight:700; color:#0f1111; margin:0 0 12px;">
+          ${{selectedProduct.price | number:'1.2-2'}}
+        </p>
+        <p style="color:#444; font-size:14px; line-height:1.6; margin-bottom:16px;">
+          {{selectedProduct.description}}
+        </p>
+        <p style="color:#007600; font-weight:600; margin-bottom:16px;">✓ In Stock</p>
+        <button style="width:100%; padding:12px; background:#ff9900; border:none; border-radius:6px; font-size:16px; font-weight:600; cursor:pointer; margin-bottom:8px;">
+          Add to Cart
+        </button>
+        <button style="width:100%; padding:12px; background:#ffd814; border:none; border-radius:6px; font-size:16px; font-weight:600; cursor:pointer;">
+          Buy Now
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

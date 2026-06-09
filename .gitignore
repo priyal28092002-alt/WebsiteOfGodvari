@@ -1,0 +1,272 @@
+# =============================================================================
+# GODAVARI BUILDING MATERIALS - .gitignore
+# Spring Boot Microservices + Angular 17 + Maven + MySQL + Redis + Kafka
+# =============================================================================
+
+
+# =============================================================================
+# INTELLIJ IDEA
+# =============================================================================
+.idea/
+*.iws
+*.iml
+*.ipr
+.idea_modules/
+atlassian-ide-plugin.xml
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+
+# =============================================================================
+# MAVEN BUILD ARTIFACTS
+# =============================================================================
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+*.rar
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.properties
+
+
+# =============================================================================
+# SPRING BOOT
+# =============================================================================
+# Application properties with sensitive data
+**/application-prod.yml
+**/application-prod.properties
+**/application-local.yml
+**/application-local.properties
+**/application-dev.yml
+**/application-dev.properties
+**/application-secret.yml
+**/application-secret.properties
+
+# Spring Boot packaged files
+spring-boot-*.jar
+
+
+# =============================================================================
+# SENSITIVE CONFIGURATION & SECRETS
+# =============================================================================
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+.env.staging
+*.env
+
+# JWT secrets
+jwt-secret.txt
+jwt.properties
+secret.properties
+secrets.yml
+secrets.yaml
+
+# Database credentials
+db.properties
+database.properties
+
+# SSL/TLS certificates
+*.pem
+*.key
+*.crt
+*.cer
+*.p12
+*.jks
+*.keystore
+*.truststore
+
+
+# =============================================================================
+# LOGS
+# =============================================================================
+logs/
+*.log
+*.log.*
+log/
+logging/
+# Spring Boot log files
+spring.log
+/logs/
+**/logs/*.log
+
+
+# =============================================================================
+# NODE.JS / ANGULAR FRONTEND
+# =============================================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+package-lock.json
+yarn.lock
+
+# Angular build output
+frontend/**/dist/
+frontend/**/.angular/
+frontend/**/dist-server/
+
+# Angular cache
+.angular/
+frontend/**/.angular/cache/
+
+# Angular environment files with secrets
+frontend/**/src/environments/environment.prod.ts
+frontend/**/src/environments/environment.local.ts
+
+# Angular test coverage
+frontend/**/coverage/
+frontend/**/.nyc_output/
+
+
+# =============================================================================
+# WHATSAPP SESSION (sensitive - contains auth tokens)
+# =============================================================================
+whatsapp-session/
+**/whatsapp-session/
+*.wwebjs_auth/
+*.wwebjs_cache/
+
+
+# =============================================================================
+# KAFKA & ZOOKEEPER DATA
+# =============================================================================
+kafka-logs/
+zookeeper-data/
+C:/tmp/kafka-logs/
+C:/tmp/zookeeper/
+
+
+# =============================================================================
+# REDIS
+# =============================================================================
+dump.rdb
+*.rdb
+redis-data/
+
+
+# =============================================================================
+# MYSQL / DATABASE
+# =============================================================================
+*.sql.bak
+*.mwb.bak
+mysql-data/
+data/
+
+
+# =============================================================================
+# DOCKER
+# =============================================================================
+# Keep docker-compose.yml but ignore override files
+docker-compose.override.yml
+docker-compose.local.yml
+docker-compose.prod.yml
+.docker/
+
+
+# =============================================================================
+# OS SPECIFIC FILES
+# =============================================================================
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+
+# =============================================================================
+# TEMPORARY & GENERATED FILES
+# =============================================================================
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+*.bak
+*.backup
+*.orig
+*.rej
+*.patch
+.cache/
+tmp/
+temp/
+
+
+# =============================================================================
+# TEST & COVERAGE REPORTS
+# =============================================================================
+/test-results/
+/coverage/
+surefire-reports/
+**/target/surefire-reports/
+**/target/failsafe-reports/
+jacoco.exec
+*.jacoco
+
+
+# =============================================================================
+# PROJECT SPECIFIC - GENERATED/RUNTIME FILES
+# =============================================================================
+# Config server local repo (contains cloned config)
+config-repo-local/
+
+# Generated API docs
+**/target/generated-sources/
+**/target/generated-test-sources/
+
+# Eureka cache
+**/eureka-client-security-params/
+
+# Local bat script overrides (keep templates, ignore personal configs)
+start-local.bat
+run-local.bat

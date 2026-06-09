@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Godavari Building Materials - Architecture</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #0a0f1e;
+    color: #e2e8f0;
+    min-height: 100vh;
+    padding: 32px 24px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .header h1 {
+    font-size: 32px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #60a5fa, #a78bfa, #34d399);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+  .header p { color: rgba(255,255,255,0.5); font-size: 16px; }
+
+  /* Tech Stack */
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 48px;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .tech-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .tech-card:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-3px);
+    border-color: rgba(255,255,255,0.25);
+  }
+  .tech-card .icon { font-size: 28px; margin-bottom: 8px; }
+  .tech-card .name { font-size: 13px; font-weight: 700; color: white; }
+  .tech-card .ver  { font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 3px; }
+
+  /* Section title */
+  .section-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+  }
+
+  /* Architecture Diagram */
+  .arch-wrap {
+    max-width: 1400px;
+    margin: 0 auto 48px;
+    position: relative;
+  }
+
+  /* Layers */
+  .layer {
+    margin-bottom: 8px;
+  }
+  .layer-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 10px;
+    padding-left: 4px;
+  }
+  .layer-row {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Service boxes */
+  .svc {
+    border-radius: 14px;
+    padding: 18px 20px;
+    min-width: 160px;
+    text-align: center;
+    position: relative;
+    transition: all 0.25s;
+    cursor: pointer;
+    border: 2px solid transparent;
+  }
+  .svc:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+  }
+  .svc .svc-icon  { font-size: 24px; margin-bottom: 8px; }
+  .svc .svc-name  { font-size: 13px; font-weight: 700; color: white; }
+  .svc .svc-port  { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 3px; }
+  .svc .svc-tech  { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 4px; }
+  .svc .svc-db    {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.3);
+  }
+
+  /* Colors per type */
+  .svc-frontend  { background: linear-gradient(135deg,#0f2d5e,#1e3a5f); border-color: #3b82f6; }
+  .svc-gateway   { background: linear-gradient(135deg,#1a0533,#2d0d4e); border-color: #8b5cf6; }
+  .svc-infra     { background: linear-gradient(135deg,#1a2e00,#2d4a00); border-color: #84cc16; }
+  .svc-user      { background: linear-gradient(135deg,#0d1f3c,#1a3356); border-color: #60a5fa; }
+  .svc-product   { background: linear-gradient(135deg,#0d2e1a,#1a4a2e); border-color: #34d399; }
+  .svc-order     { background: linear-gradient(135deg,#2e1a00,#4a2e00); border-color: #f59e0b; }
+  .svc-inventory { background: linear-gradient(135deg,#0d2233,#1a3a4d); border-color: #38bdf8; }
+  .svc-quotation { background: linear-gradient(135deg,#1f0d3c,#331a56); border-color: #a78bfa; }
+  .svc-billing   { background: linear-gradient(135deg,#2e0d1a,#4a1a2e); border-color: #f472b6; }
+  .svc-cache     { background: linear-gradient(135deg,#2e0d0d,#4a1a1a); border-color: #ef4444; }
+  .svc-config    { background: linear-gradient(135deg,#1a1a00,#2e2e00); border-color: #eab308; }
+
+  /* Arrows connector */
+  .arrows {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin: 6px 0;
+    flex-wrap: wrap;
+  }
+  .arrow-down {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: rgba(255,255,255,0.3);
+    font-size: 12px;
+    gap: 2px;
+  }
+  .arrow-down .arr-line {
+    width: 2px;
+    height: 24px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+  }
+  .arrow-down .arr-head { font-size: 14px; color: rgba(255,255,255,0.5); }
+  .arrow-down .arr-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.3);
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+  }
+
+  /* Flow connectors */
+  .flow-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 16px 0;
+    flex-wrap: wrap;
+  }
+  .flow-arrow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    white-space: nowrap;
+  }
+  .flow-arrow .fa-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  /* Flow chart */
+  .flow-chart {
+    max-width: 1400px;
+    margin: 0 auto 48px;
+  }
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .flow-box {
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    border: 1px solid;
+    white-space: nowrap;
+  }
+  .flow-box.actor    { background:rgba(59,130,246,0.15); border-color:rgba(59,130,246,0.4); color:#93c5fd; }
+  .flow-box.action   { background:rgba(139,92,246,0.15); border-color:rgba(139,92,246,0.4); color:#c4b5fd; }
+  .flow-box.service  { background:rgba(16,185,129,0.12); border-color:rgba(16,185,129,0.35); color:#6ee7b7; }
+  .flow-box.trigger  { background:rgba(245,158,11,0.12); border-color:rgba(245,158,11,0.35); color:#fcd34d; }
+  .flow-box.result   { background:rgba(244,114,182,0.12); border-color:rgba(244,114,182,0.35); color:#f9a8d4; }
+  .flow-arr { color: rgba(255,255,255,0.4); font-size: 18px; flex-shrink: 0; }
+  .flow-note {
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+    font-style: italic;
+    padding: 4px 10px;
+    border-left: 2px solid rgba(255,255,255,0.1);
+    margin-left: 8px;
+  }
+
+  /* Database map */
+  .db-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    max-width: 1400px;
+    margin: 0 auto 48px;
+  }
+  .db-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .db-card .db-name { font-size: 13px; font-weight: 700; color: white; margin-bottom: 4px; }
+  .db-card .db-schema { font-size: 11px; color: rgba(255,255,255,0.4); margin-bottom: 8px; }
+  .db-card .db-tables { font-size: 11px; color: rgba(255,255,255,0.55); line-height: 1.8; }
+  .db-card .db-tables span { display: block; padding: 2px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+
+  /* API map */
+  .api-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    max-width: 1400px;
+    margin: 0 auto 48px;
+  }
+  .api-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .api-card-header {
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .api-endpoint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    font-size: 12px;
+  }
+  .method {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    min-width: 42px;
+    text-align: center;
+  }
+  .m-get    { background:rgba(16,185,129,0.2); color:#6ee7b7; }
+  .m-post   { background:rgba(59,130,246,0.2); color:#93c5fd; }
+  .m-put    { background:rgba(245,158,11,0.2); color:#fcd34d; }
+  .m-delete { background:rgba(239,68,68,0.2); color:#fca5a5; }
+  .ep-path  { color: rgba(255,255,255,0.7); font-family: monospace; }
+  .ep-desc  { color: rgba(255,255,255,0.3); font-size: 11px; margin-left: auto; }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    color: rgba(255,255,255,0.2);
+    font-size: 12px;
+    padding: 24px 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    .layer-row { flex-direction: column; align-items: center; }
+    .flow-row  { flex-direction: column; align-items: flex-start; }
+    .flow-arr  { transform: rotate(90deg); }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <h1>🏗️ Godavari Building Materials — Architecture</h1>
+  <p>Nashik, Maharashtra · Full-Stack Microservices Architecture · v1.0</p>
+</div>
+
+<!-- TECH STACK -->
+<div class="section-title">⚙️ Technology Stack</div>
+<div class="tech-grid">
+  <div class="tech-card"><div class="icon">☕</div><div class="name">Java 17</div><div class="ver">Backend Language</div></div>
+  <div class="tech-card"><div class="icon">🍃</div><div class="name">Spring Boot</div><div class="ver">3.2.0</div></div>
+  <div class="tech-card"><div class="icon">☁️</div><div class="name">Spring Cloud</div><div class="ver">2023.0.0</div></div>
+  <div class="tech-card"><div class="icon">🔀</div><div class="name">Spring Gateway</div><div class="ver">API Gateway</div></div>
+  <div class="tech-card"><div class="icon">📡</div><div class="name">Netflix Eureka</div><div class="ver">Service Discovery</div></div>
+  <div class="tech-card"><div class="icon">🔒</div><div class="name">Spring Security</div><div class="ver">JWT Auth</div></div>
+  <div class="tech-card"><div class="icon">🗄️</div><div class="name">Spring Data JPA</div><div class="ver">ORM / Hibernate</div></div>
+  <div class="tech-card"><div class="icon">🐬</div><div class="name">MySQL 8</div><div class="ver">Primary Database</div></div>
+  <div class="tech-card"><div class="icon">🔴</div><div class="name">Redis</div><div class="ver">Cache Layer</div></div>
+  <div class="tech-card"><div class="icon">🔧</div><div class="name">Config Server</div><div class="ver">Centralized Config</div></div>
+  <div class="tech-card"><div class="icon">📖</div><div class="name">SpringDoc / Swagger</div><div class="ver">API Docs 2.3.0</div></div>
+  <div class="tech-card"><div class="icon">🏗️</div><div class="name">Maven</div><div class="ver">Build Tool</div></div>
+  <div class="tech-card"><div class="icon">🅰️</div><div class="name">Angular 17</div><div class="ver">Frontend Framework</div></div>
+  <div class="tech-card"><div class="icon">🎨</div><div class="name">Angular Material</div><div class="ver">UI Components</div></div>
+  <div class="tech-card"><div class="icon">📘</div><div class="name">TypeScript</div><div class="ver">~5.2.0</div></div>
+  <div class="tech-card"><div class="icon">🖥️</div><div class="name">Node.js 24</div><div class="ver">Log Server</div></div>
+  <div class="tech-card"><div class="icon">🪙</div><div class="name">JWT (jjwt)</div><div class="ver">0.11.5 · Auth Tokens</div></div>
+  <div class="tech-card"><div class="icon">🌐</div><div class="name">REST / HTTP</div><div class="ver">Inter-service Comms</div></div>
+</div>
+
+<!-- ARCHITECTURE DIAGRAM -->
+<div class="section-title">🏛️ Architecture Diagram</div>
+<div class="arch-wrap">
+
+  <!-- LAYER 1: Frontend -->
+  <div class="layer">
+    <div class="layer-label">Frontend Layer</div>
+    <div class="layer-row">
+      <div class="svc svc-frontend" style="min-width:320px;">
+        <div class="svc-icon">🅰️</div>
+        <div class="svc-name">Angular 17 Frontend</div>
+        <div class="svc-port">http://localhost:4200</div>
+        <div class="svc-tech">TypeScript · Angular Material · RxJS</div>
+        <div class="svc-db" style="background:rgba(59,130,246,0.2);color:#93c5fd;">Customer Portal + Admin Panel</div>
+      </div>
+      <div class="svc svc-cache" style="min-width:200px;">
+        <div class="svc-icon">🖥️</div>
+        <div class="svc-name">Log Server</div>
+        <div class="svc-port">http://localhost:9090</div>
+        <div class="svc-tech">Node.js · HTTP · SSE</div>
+        <div class="svc-db" style="background:rgba(239,68,68,0.2);color:#fca5a5;">Live Log Streaming</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrows">
+    <div class="arrow-down"><div class="arr-line"></div><div class="arr-head">▼</div><div class="arr-label">HTTP REST · JWT Bearer Token</div></div>
+  </div>
+
+  <!-- LAYER 2: API Gateway -->
+  <div class="layer">
+    <div class="layer-label">Gateway Layer</div>
+    <div class="layer-row">
+      <div class="svc svc-gateway" style="min-width:420px;">
+        <div class="svc-icon">🔀</div>
+        <div class="svc-name">API Gateway</div>
+        <div class="svc-port">http://localhost:8087</div>
+        <div class="svc-tech">Spring Cloud Gateway · CORS · Load Balancer</div>
+        <div class="svc-db" style="background:rgba(139,92,246,0.2);color:#c4b5fd;">Routes all requests to backend services</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrows">
+    <div class="arrow-down"><div class="arr-line"></div><div class="arr-head">▼</div><div class="arr-label">Route by path prefix</div></div>
+  </div>
+
+  <!-- LAYER 3: Business Services -->
+  <div class="layer">
+    <div class="layer-label">Business Services Layer</div>
+    <div class="layer-row">
+      <div class="svc svc-user">
+        <div class="svc-icon">👤</div>
+        <div class="svc-name">User Service</div>
+        <div class="svc-port">:8081 · /auth/** /users/**</div>
+        <div class="svc-tech">Spring Security · JWT · BCrypt</div>
+        <div class="svc-db">🐬 godavari_users</div>
+      </div>
+      <div class="svc svc-product">
+        <div class="svc-icon">📦</div>
+        <div class="svc-name">Product Service</div>
+        <div class="svc-port">:8082 · /products/**</div>
+        <div class="svc-tech">Spring Data JPA · Redis Cache</div>
+        <div class="svc-db">🐬 godavari_products 🔴 Redis</div>
+      </div>
+      <div class="svc svc-order">
+        <div class="svc-icon">🧾</div>
+        <div class="svc-name">Order Service</div>
+        <div class="svc-port">:8083 · /orders/**</div>
+        <div class="svc-tech">Spring Data JPA · RestTemplate</div>
+        <div class="svc-db">🐬 godavari_orders</div>
+      </div>
+      <div class="svc svc-inventory">
+        <div class="svc-icon">🏭</div>
+        <div class="svc-name">Inventory Service</div>
+        <div class="svc-port">:8084 · /inventory/**</div>
+        <div class="svc-tech">Spring Data JPA · Redis Cache</div>
+        <div class="svc-db">🐬 godavari_inventory 🔴 Redis</div>
+      </div>
+      <div class="svc svc-quotation">
+        <div class="svc-icon">📋</div>
+        <div class="svc-name">Quotation Service</div>
+        <div class="svc-port">:8085 · /quotations/**</div>
+        <div class="svc-tech">Spring Data JPA · RestTemplate</div>
+        <div class="svc-db">🐬 godavari_quotations</div>
+      </div>
+      <div class="svc svc-billing">
+        <div class="svc-icon">💰</div>
+        <div class="svc-name">Billing Service</div>
+        <div class="svc-port">:8086 · /billing/**</div>
+        <div class="svc-tech">Spring Data JPA · GST Calc</div>
+        <div class="svc-db">🐬 godavari_billing</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrows">
+    <div class="arrow-down"><div class="arr-line"></div><div class="arr-head">▼</div><div class="arr-label">Register &amp; Heartbeat</div></div>
+  </div>
+
+  <!-- LAYER 4: Infrastructure -->
+  <div class="layer">
+    <div class="layer-label">Infrastructure Layer</div>
+    <div class="layer-row">
+      <div class="svc svc-infra">
+        <div class="svc-icon">📡</div>
+        <div class="svc-name">Eureka Server</div>
+        <div class="svc-port">:8761 · Service Discovery</div>
+        <div class="svc-tech">Netflix Eureka · Dashboard</div>
+        <div class="svc-db" style="background:rgba(132,204,22,0.15);color:#bef264;">All services register here</div>
+      </div>
+      <div class="svc svc-config">
+        <div class="svc-icon">🔧</div>
+        <div class="svc-name">Config Server</div>
+        <div class="svc-port">:8888 · Centralized Config</div>
+        <div class="svc-tech">Spring Cloud Config · YAML</div>
+        <div class="svc-db" style="background:rgba(234,179,8,0.15);color:#fde047;">config-repo/*.yml</div>
+      </div>
+      <div class="svc svc-cache">
+        <div class="svc-icon">🔴</div>
+        <div class="svc-name">Redis Cache</div>
+        <div class="svc-port">:6379</div>
+        <div class="svc-tech">In-memory · TTL 10min</div>
+        <div class="svc-db" style="background:rgba(239,68,68,0.2);color:#fca5a5;">Product + Inventory cache</div>
+      </div>
+      <div class="svc svc-user" style="border-color:#6ee7b7">
+        <div class="svc-icon">🐬</div>
+        <div class="svc-name">MySQL 8</div>
+        <div class="svc-port">:3306 · 6 Databases</div>
+        <div class="svc-tech">InnoDB · JPA / Hibernate</div>
+        <div class="svc-db" style="background:rgba(16,185,129,0.15);color:#6ee7b7;">godavari_* databases</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FLOW CHART -->
+<div class="section-title">🔄 Complete Business Flow</div>
+<div class="flow-chart">
+
+  <!-- Flow 1: Customer Login & Browse -->
+  <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:20px 24px;margin-bottom:16px;">
+    <div style="font-size:13px;font-weight:700;color:#60a5fa;margin-bottom:14px;">📱 Flow 1 — Customer Login &amp; Browse Products</div>
+    <div class="flow-row">
+      <div class="flow-box actor">Customer</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box action">POST /auth/login</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box service">API Gateway :8087</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box service">User Service :8081</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box result">JWT Token returned</div>
+    </div>
+    <div class="flow-row" style="margin-top:10px;">
+      <div class="flow-box actor">Customer</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box action">GET /products</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box service">API Gateway</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box service">Product Service :8082</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box trigger">🔴 Check Redis Cache</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box result">Products returned</div>
+    </div>
+  </div>
+
+  <!-- Flow 2: Place Order -->
+  <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:20px 24px;margin-bottom:16px;">
+    <div style="font-size:13px;font-weight:700;color:#f59e0b;margin-bottom:14px;">🛒 Flow 2 — Place Order</div>
+    <div class="flow-row">
+      <div class="flow-box actor">Customer</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box action">POST /orders</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box service">Order Service :8083</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box trigger">Save to godavari_orders</div>
+    </div>
+    <div class="flow-row" style="margin-top:10px;">
+      <div class="flow-box service">Order Service</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box action">POST /inventory/update (OUT)</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box service">API Gateway</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box service">Inventory Service :8084</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box result">Stock deducted ✅</div>
+    </div>
+  </div>
+
+  <!-- Flow 3: Admin Confirms Order -->
+  <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:20px 24px;margin-bottom:16px;">
+    <div style="font-size:13px;font-weight:700;color:#34d399;margin-bottom:14px;">✅ Flow 3 — Admin Confirms Order → Invoice Generated</div>
+    <div class="flow-row">
+      <div class="flow-box actor">Admin</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box action">PUT /orders/{id}/status?status=CONFIRMED</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box service">Order Service :8083</div>
+    </div>
+    <div class="flow-row" style="margin-top:10px;">
+      <div class="flow-box service">Order Service</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box action">POST /billing/invoices</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box service">API Gateway</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box service">Billing Service :8086</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box result">INV-XXXXXXXX created ✅</div>
+    </div>
+  </div>
+
+  <!-- Flow 4: Quotation to Order -->
+  <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:20px 24px;margin-bottom:16px;">
+    <div style="font-size:13px;font-weight:700;color:#a78bfa;margin-bottom:14px;">📋 Flow 4 — RFQ / Quotation → Auto Order</div>
+    <div class="flow-row">
+      <div class="flow-box actor">Customer</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box action">POST /quotations</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box service">Quotation Service :8085</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box result">RFQ-XXXXXXXX (SUBMITTED)</div>
+    </div>
+    <div class="flow-row" style="margin-top:10px;">
+      <div class="flow-box actor">Admin</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box action">PUT /quotations/{id}/status?status=APPROVED</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box service">Quotation Service</div>
+    </div>
+    <div class="flow-row" style="margin-top:10px;">
+      <div class="flow-box service">Quotation Service</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box action">POST /orders (auto)</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box service">API Gateway</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box service">Order Service :8083</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box result">Order + Stock deduction ✅</div>
+    </div>
+  </div>
+
+  <!-- Flow 5: Admin Adds Product -->
+  <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:20px 24px;margin-bottom:16px;">
+    <div style="font-size:13px;font-weight:700;color:#34d399;margin-bottom:14px;">📦 Flow 5 — Admin Adds Product + Stock</div>
+    <div class="flow-row">
+      <div class="flow-box actor">Admin</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box action">POST /products</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box service">Product Service :8082</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box trigger">🔴 Redis cache evicted</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box result">Product saved ✅</div>
+    </div>
+    <div class="flow-row" style="margin-top:10px;">
+      <div class="flow-box actor">Admin</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box action">POST /inventory/update (IN)</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box service">Inventory Service :8084</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box result">Stock added ✅</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- DATABASE MAP -->
+<div class="section-title">🗄️ Database Map (MySQL)</div>
+<div class="db-grid">
+  <div class="db-card">
+    <div class="db-name">👤 godavari_users</div>
+    <div class="db-schema">User Service :8081</div>
+    <div class="db-tables">
+      <span>📋 users (id, name, email, password, role, phone, city, gst…)</span>
+    </div>
+  </div>
+  <div class="db-card">
+    <div class="db-name">📦 godavari_products</div>
+    <div class="db-schema">Product Service :8082 + 🔴 Redis</div>
+    <div class="db-tables">
+      <span>📋 products (id, name, sku, price, gstRate, unit, imageUrl…)</span>
+      <span>📋 categories (id, name, description)</span>
+    </div>
+  </div>
+  <div class="db-card">
+    <div class="db-name">🧾 godavari_orders</div>
+    <div class="db-schema">Order Service :8083</div>
+    <div class="db-tables">
+      <span>📋 orders (id, orderNumber, userId, status, totalAmount…)</span>
+      <span>📋 order_items (id, orderId, productId, qty, unitPrice, gst…)</span>
+    </div>
+  </div>
+  <div class="db-card">
+    <div class="db-name">🏭 godavari_inventory</div>
+    <div class="db-schema">Inventory Service :8084 + 🔴 Redis</div>
+    <div class="db-tables">
+      <span>📋 inventory (id, productId, quantityAvailable, threshold…)</span>
+      <span>📋 stock_transactions (id, productId, type, qty, notes…)</span>
+    </div>
+  </div>
+  <div class="db-card">
+    <div class="db-name">📋 godavari_quotations</div>
+    <div class="db-schema">Quotation Service :8085</div>
+    <div class="db-tables">
+      <span>📋 quotations (id, quotationNumber, userId, status, totalAmount…)</span>
+      <span>📋 quotation_items (id, quotationId, productId, qty, quotedPrice…)</span>
+    </div>
+  </div>
+  <div class="db-card">
+    <div class="db-name">💰 godavari_billing</div>
+    <div class="db-schema">Billing Service :8086</div>
+    <div class="db-tables">
+      <span>📋 invoices (id, invoiceNumber, orderId, userId, cgst, sgst, totalAmount, paymentStatus…)</span>
+    </div>
+  </div>
+</div>
+
+<!-- API ENDPOINTS MAP -->
+<div class="section-title">🔌 API Endpoints (via Gateway :8087)</div>
+<div class="api-grid">
+
+  <div class="api-card">
+    <div class="api-card-header" style="background:rgba(59,130,246,0.1);color:#93c5fd;">👤 Auth & Users</div>
+    <div class="api-endpoint"><span class="method m-post">POST</span><span class="ep-path">/auth/register</span><span class="ep-desc">Register user</span></div>
+    <div class="api-endpoint"><span class="method m-post">POST</span><span class="ep-path">/auth/login</span><span class="ep-desc">Login → JWT</span></div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/users</span><span class="ep-desc">All users (admin)</span></div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/users/{id}</span><span class="ep-desc">Get user</span></div>
+    <div class="api-endpoint"><span class="method m-put">PUT</span><span class="ep-path">/users/{id}</span><span class="ep-desc">Update user</span></div>
+  </div>
+
+  <div class="api-card">
+    <div class="api-card-header" style="background:rgba(16,185,129,0.1);color:#6ee7b7;">📦 Products</div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/products</span><span class="ep-desc">List products (paginated)</span></div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/products/{id}</span><span class="ep-desc">Get product</span></div>
+    <div class="api-endpoint"><span class="method m-post">POST</span><span class="ep-path">/products</span><span class="ep-desc">Add product (admin)</span></div>
+    <div class="api-endpoint"><span class="method m-put">PUT</span><span class="ep-path">/products/{id}</span><span class="ep-desc">Update product</span></div>
+    <div class="api-endpoint"><span class="method m-delete">DEL</span><span class="ep-path">/products/{id}</span><span class="ep-desc">Delete product</span></div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/products/categories</span><span class="ep-desc">All categories</span></div>
+    <div class="api-endpoint"><span class="method m-post">POST</span><span class="ep-path">/products/categories</span><span class="ep-desc">Add category</span></div>
+  </div>
+
+  <div class="api-card">
+    <div class="api-card-header" style="background:rgba(245,158,11,0.1);color:#fcd34d;">🧾 Orders</div>
+    <div class="api-endpoint"><span class="method m-post">POST</span><span class="ep-path">/orders</span><span class="ep-desc">Place order</span></div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/orders</span><span class="ep-desc">All orders (admin)</span></div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/orders/user/{userId}</span><span class="ep-desc">My orders</span></div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/orders/{id}</span><span class="ep-desc">Get order</span></div>
+    <div class="api-endpoint"><span class="method m-put">PUT</span><span class="ep-path">/orders/{id}/status</span><span class="ep-desc">Update status</span></div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/orders/dashboard/stats</span><span class="ep-desc">Dashboard stats</span></div>
+  </div>
+
+  <div class="api-card">
+    <div class="api-card-header" style="background:rgba(56,189,248,0.1);color:#7dd3fc;">🏭 Inventory</div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/inventory</span><span class="ep-desc">All stock</span></div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/inventory/product/{id}</span><span class="ep-desc">Stock by product</span></div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/inventory/low-stock</span><span class="ep-desc">Low stock alerts</span></div>
+    <div class="api-endpoint"><span class="method m-post">POST</span><span class="ep-path">/inventory/update</span><span class="ep-desc">Add / deduct stock</span></div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/inventory/transactions/{id}</span><span class="ep-desc">Stock history</span></div>
+  </div>
+
+  <div class="api-card">
+    <div class="api-card-header" style="background:rgba(167,139,250,0.1);color:#c4b5fd;">📋 Quotations</div>
+    <div class="api-endpoint"><span class="method m-post">POST</span><span class="ep-path">/quotations</span><span class="ep-desc">Submit RFQ</span></div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/quotations</span><span class="ep-desc">All quotations (admin)</span></div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/quotations/user/{id}</span><span class="ep-desc">My quotations</span></div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/quotations/{id}</span><span class="ep-desc">Get quotation</span></div>
+    <div class="api-endpoint"><span class="method m-put">PUT</span><span class="ep-path">/quotations/{id}/status</span><span class="ep-desc">Approve / Reject</span></div>
+  </div>
+
+  <div class="api-card">
+    <div class="api-card-header" style="background:rgba(244,114,182,0.1);color:#f9a8d4;">💰 Billing</div>
+    <div class="api-endpoint"><span class="method m-post">POST</span><span class="ep-path">/billing/invoices</span><span class="ep-desc">Generate invoice</span></div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/billing/invoices</span><span class="ep-desc">All invoices (admin)</span></div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/billing/invoices/user/{id}</span><span class="ep-desc">My invoices</span></div>
+    <div class="api-endpoint"><span class="method m-get">GET</span><span class="ep-path">/billing/invoices/order/{id}</span><span class="ep-desc">Invoice by order</span></div>
+    <div class="api-endpoint"><span class="method m-put">PUT</span><span class="ep-path">/billing/invoices/{id}/pay</span><span class="ep-desc">Mark as paid</span></div>
+  </div>
+
+</div>
+
+<!-- INTER-SERVICE MAP -->
+<div class="section-title">🔗 Inter-Service Calls (all via API Gateway)</div>
+<div style="max-width:1400px;margin:0 auto 48px;">
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:12px;">
+    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(245,158,11,0.3);border-radius:12px;padding:18px;">
+      <div style="font-size:13px;font-weight:700;color:#fcd34d;margin-bottom:12px;">🧾 Order Service calls</div>
+      <div class="flow-arrow" style="margin-bottom:8px;"><span class="fa-dot" style="background:#34d399;"></span>On order CREATE → POST /inventory/update (OUT) → Inventory Service</div>
+      <div class="flow-arrow"><span class="fa-dot" style="background:#f472b6;"></span>On order CONFIRMED → POST /billing/invoices → Billing Service</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(167,139,250,0.3);border-radius:12px;padding:18px;">
+      <div style="font-size:13px;font-weight:700;color:#c4b5fd;margin-bottom:12px;">📋 Quotation Service calls</div>
+      <div class="flow-arrow"><span class="fa-dot" style="background:#f59e0b;"></span>On quotation APPROVED → POST /orders → Order Service (auto-creates order)</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(16,185,129,0.3);border-radius:12px;padding:18px;">
+      <div style="font-size:13px;font-weight:700;color:#6ee7b7;margin-bottom:12px;">📦 Product Service</div>
+      <div class="flow-arrow"><span class="fa-dot" style="background:#38bdf8;"></span>No outbound calls · serves product catalog · Redis cached</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(56,189,248,0.3);border-radius:12px;padding:18px;">
+      <div style="font-size:13px;font-weight:700;color:#7dd3fc;margin-bottom:12px;">🏭 Inventory Service</div>
+      <div class="flow-arrow"><span class="fa-dot" style="background:#38bdf8;"></span>No outbound calls · receives stock updates · Redis cached</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(244,114,182,0.3);border-radius:12px;padding:18px;">
+      <div style="font-size:13px;font-weight:700;color:#f9a8d4;margin-bottom:12px;">💰 Billing Service</div>
+      <div class="flow-arrow"><span class="fa-dot" style="background:#f472b6;"></span>No outbound calls · receives invoice requests · stores in MySQL</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(59,130,246,0.3);border-radius:12px;padding:18px;">
+      <div style="font-size:13px;font-weight:700;color:#93c5fd;margin-bottom:12px;">👤 User Service</div>
+      <div class="flow-arrow"><span class="fa-dot" style="background:#60a5fa;"></span>No outbound calls · auth gateway · JWT generation &amp; validation</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  🏗️ Godavari Building Materials Nashik · Microservices Architecture · Spring Boot 3.2 · Angular 17 · MySQL 8 · Redis · Java 17
+  <br>9 Services · 6 Databases · 1 API Gateway · 1 Eureka · 1 Config Server · 1 Redis
+</div>
+
+</body>
+</html>
