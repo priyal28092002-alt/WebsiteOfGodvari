@@ -1,37 +1,5 @@
-server:
-  port: 8089
-
 spring:
   application:
     name: notification-service
-  kafka:
-    bootstrap-servers: localhost:9092
-    consumer:
-      group-id: notification-group
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    producer:
-      key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
   config:
     import: optional:configserver:http://localhost:8888
-
-eureka:
-  client:
-    service-url:
-      defaultZone: http://localhost:8761/eureka/
-
-whatsapp:
-  provider: wppconnect      # wppconnect | log-only
-  company-name: "Godavari Building Materials"
-  company-city: "Nashik, Maharashtra"
-  company-phone: "+91-XXXXX-XXXXX"
-
-logging:
-  level:
-    com.godavari: DEBUG
-    org.springframework.kafka: INFO
-  pattern:
-    console: "%d{HH:mm:ss} [%-5level] %logger{25} - %msg%n"
-    file: "%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{25} - %msg%n"

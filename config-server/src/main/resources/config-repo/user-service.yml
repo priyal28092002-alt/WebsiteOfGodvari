@@ -27,10 +27,17 @@ jwt:
   secret: GodavariBuildingMaterialsNashikSecretKey2024SuperSecure
   expiration: 86400000
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
 logging:
   level:
     com.godavari: DEBUG
     org.springframework.web.servlet: DEBUG
+    org.springframework.security: DEBUG
   pattern:
     console: "%d{HH:mm:ss} [%-5level] %logger{25} - %msg%n"
     file: "%d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{25} - %msg%n"

@@ -7,57 +7,109 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOriginPatterns: "*"
-            allowedMethods:
-              - GET
-              - POST
-              - PUT
-              - DELETE
-              - OPTIONS
-              - PATCH
+            allowedOrigins: "*"
+            allowedMethods: "*"
             allowedHeaders: "*"
-            allowCredentials: true
-            maxAge: 3600
+            exposedHeaders: "*"
       routes:
         - id: auth
           uri: lb://user-service
-          predicates:
-            - Path=/auth/**
+          predicates: [Path=/auth/**]
 
         - id: users
           uri: lb://user-service
-          predicates:
-            - Path=/users/**
+          predicates: [Path=/users/**]
 
         - id: products
           uri: lb://product-service
-          predicates:
-            - Path=/products/**
+          predicates: [Path=/products/**]
 
         - id: orders
           uri: lb://order-service
-          predicates:
-            - Path=/orders/**
+          predicates: [Path=/orders/**]
 
         - id: inventory
           uri: lb://inventory-service
-          predicates:
-            - Path=/inventory/**
+          predicates: [Path=/inventory/**]
 
         - id: quotations
           uri: lb://quotation-service
-          predicates:
-            - Path=/quotations/**
+          predicates: [Path=/quotations/**]
 
         - id: billing
           uri: lb://billing-service
+          predicates: [Path=/billing/**]
+
+        # ── Swagger API docs routes ──
+        - id: user-service-docs
+          uri: http://localhost:8081
           predicates:
-            - Path=/billing/**
+            - Path=/user-service/v3/api-docs
+          filters:
+            - RewritePath=/user-service(?<segment>/?.*), $\{segment}
+
+        - id: product-service-docs
+          uri: http://localhost:8082
+          predicates:
+            - Path=/product-service/v3/api-docs
+          filters:
+            - RewritePath=/product-service(?<segment>/?.*), $\{segment}
+
+        - id: order-service-docs
+          uri: http://localhost:8083
+          predicates:
+            - Path=/order-service/v3/api-docs
+          filters:
+            - RewritePath=/order-service(?<segment>/?.*), $\{segment}
+
+        - id: inventory-service-docs
+          uri: http://localhost:8084
+          predicates:
+            - Path=/inventory-service/v3/api-docs
+          filters:
+            - RewritePath=/inventory-service(?<segment>/?.*), $\{segment}
+
+        - id: quotation-service-docs
+          uri: http://localhost:8085
+          predicates:
+            - Path=/quotation-service/v3/api-docs
+          filters:
+            - RewritePath=/quotation-service(?<segment>/?.*), $\{segment}
+
+        - id: billing-service-docs
+          uri: http://localhost:8086
+          predicates:
+            - Path=/billing-service/v3/api-docs
+          filters:
+            - RewritePath=/billing-service(?<segment>/?.*), $\{segment}
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    config-url: /v3/api-docs/swagger-config
+    disable-swagger-default-url: true
+    urls:
+      - name: user-service
+        url: /user-service/v3/api-docs
+      - name: product-service
+        url: /product-service/v3/api-docs
+      - name: order-service
+        url: /order-service/v3/api-docs
+      - name: inventory-service
+        url: /inventory-service/v3/api-docs
+      - name: quotation-service
+        url: /quotation-service/v3/api-docs
+      - name: billing-service
+        url: /billing-service/v3/api-docs
+  api-docs:
+    enabled: true
+  webjars:
+    prefix: ""
 
 logging:
   level:
