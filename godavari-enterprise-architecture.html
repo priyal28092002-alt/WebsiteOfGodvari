@@ -32,7 +32,6 @@
     --shadow-lg: 0 20px 60px rgba(0,0,0,0.5);
   }
 
-  /* ============ RESET & BASE ============ */
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
@@ -189,25 +188,13 @@
   }
 
   @keyframes slideInDown {
-    from {
-      opacity: 0;
-      transform: translateY(-30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   @keyframes slideInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   /* ============ SECTION LAYOUT ============ */
@@ -324,11 +311,12 @@
     position: relative;
     width: 100%;
     max-width: 100%;
-    aspect-ratio: 16/9;
+    min-height: 600px;
     background: linear-gradient(180deg, rgba(10,14,39,0.5), rgba(20,29,58,0.3));
     border: 1px solid var(--border);
     border-radius: 12px;
     box-shadow: inset 0 0 40px rgba(0,0,0,0.3);
+    overflow: hidden;
   }
 
   .diagram-inner {
@@ -386,6 +374,17 @@
     box-shadow: 0 0 24px rgba(94,234,212,0.2);
   }
 
+  .node.active {
+    border-color: var(--cyan);
+    box-shadow: 0 0 24px rgba(94,234,212,0.6);
+    animation: pulse 0.6s ease-out;
+  }
+
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 rgba(94,234,212,0.6); }
+    100% { box-shadow: 0 0 30px rgba(94,234,212,0); }
+  }
+
   .node .icon {
     font-size: 28px;
     line-height: 1;
@@ -403,6 +402,16 @@
     font-size: 10px;
     color: var(--text-dim);
     margin-top: 4px;
+  }
+
+  /* ============ PACKET ANIMATION ============ */
+  .packet {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    box-shadow: 0 0 8px currentColor;
+    z-index: 100;
   }
 
   /* ============ WORKFLOW CARDS ============ */
@@ -569,6 +578,7 @@
     overflow-y: auto;
     box-shadow: var(--shadow-lg);
     animation: slideInCenter 0.3s ease-out;
+    position: relative;
   }
 
   @keyframes slideInCenter {
@@ -701,6 +711,13 @@
     cursor: not-allowed;
   }
 
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
   /* ============ EXPANDABLE SECTION ============ */
   .expandable {
     background: linear-gradient(135deg, rgba(94,234,212,0.08), rgba(183,156,240,0.04));
@@ -791,7 +808,6 @@
     color: var(--text-dim);
   }
 
-  /* ============ RESPONSIVE ============ */
   @media (max-width: 768px) {
     nav .nav-links { display: none; }
     .hero h1 { font-size: 32px; }
@@ -799,9 +815,9 @@
     .tech-grid { grid-template-columns: 1fr; }
     .section-title { font-size: 20px; }
     .modal-content { max-width: 90vw; }
+    .diagram-wrap { min-height: 400px; }
   }
 
-  /* ============ LOADING ANIMATION ============ */
   .loading-spinner {
     display: inline-block;
     width: 16px;
@@ -932,106 +948,100 @@
 <!-- ============ ARCHITECTURE DIAGRAM ============ -->
 <section id="architecture">
   <div class="section-title">System Architecture</div>
-  <div class="section-subtitle">Complete request flow and service interactions</div>
+  <div class="section-subtitle">Complete request flow and service interactions - Click any button to watch animated flow</div>
   
   <div class="controls">
-    <button class="control-btn" onclick="runDemo('overview')">🎬 Overview</button>
-    <button class="control-btn" onclick="runDemo('auth')">🔐 Authentication</button>
-    <button class="control-btn" onclick="runDemo('order')">🧾 Order Flow</button>
-    <button class="control-btn" onclick="runDemo('cache')">💾 Cache Hit</button>
+    <button class="control-btn" onclick="runFlow('overview')"><span class="dot" style="background: var(--cyan);"></span>🎬 System Overview</button>
+    <button class="control-btn" onclick="runFlow('login')"><span class="dot" style="background: #93c5fd;"></span>🔐 Login Flow</button>
+    <button class="control-btn" onclick="runFlow('order')"><span class="dot" style="background: #fcd34d;"></span>🧾 Order Processing</button>
+    <button class="control-btn" onclick="runFlow('product')"><span class="dot" style="background: #6ee7b7;"></span>📦 Product Cache</button>
+    <button class="control-btn" onclick="runFlow('inventory')"><span class="dot" style="background: #7dd3fc;"></span>🏭 Inventory Update</button>
+    <button class="control-btn" onclick="runFlow('quotation')"><span class="dot" style="background: #c4b5fd;"></span>📋 Quotation RFQ</button>
   </div>
 
   <div class="diagram-container">
     <div class="diagram-wrap">
-      <div class="diagram-inner">
-        <!-- Architecture SVG -->
-        <svg class="connectors" viewBox="0 0 1500 900" preserveAspectRatio="xMidYMid meet">
-          <!-- Frontend layer -->
-          <text x="750" y="40" text-anchor="middle" font-size="14" fill="var(--text-dim)" font-weight="bold">CLIENT LAYER</text>
-          
-          <!-- Gateway layer -->
-          <text x="750" y="130" text-anchor="middle" font-size="14" fill="var(--text-dim)" font-weight="bold">API GATEWAY LAYER</text>
-          
-          <!-- Services layer -->
-          <text x="750" y="280" text-anchor="middle" font-size="14" fill="var(--text-dim)" font-weight="bold">MICROSERVICES LAYER</text>
-          
-          <!-- Infrastructure layer -->
-          <text x="750" y="530" text-anchor="middle" font-size="14" fill="var(--text-dim)" font-weight="bold">INFRASTRUCTURE LAYER</text>
+      <div class="diagram-inner" id="diagramInner">
+        <svg class="connectors" id="flowDiagram" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid meet">
+          <!-- Layer lines -->
+          <line x1="50" y1="100" x2="1150" y2="100" stroke="rgba(126,168,216,0.1)" stroke-width="1" stroke-dasharray="5,5"/>
+          <line x1="50" y1="200" x2="1150" y2="200" stroke="rgba(126,168,216,0.1)" stroke-width="1" stroke-dasharray="5,5"/>
+          <line x1="50" y1="400" x2="1150" y2="400" stroke="rgba(126,168,216,0.1)" stroke-width="1" stroke-dasharray="5,5"/>
         </svg>
-        
+
         <!-- Frontend -->
-        <div class="node frontend" id="n-frontend" style="left:35%; top:5%; width:30%; height:10%;">
+        <div class="node frontend" id="n-frontend" style="left:35%; top:5%; width:30%; height:8%;" onclick="highlightNode(this)">
           <div class="icon">🅰️</div>
           <div class="name">Angular 17 Frontend</div>
-          <div class="meta">localhost:4200 · Customer + Admin Portal</div>
+          <div class="meta">:4200</div>
         </div>
 
         <!-- Gateway -->
-        <div class="node gateway" id="n-gateway" style="left:35%; top:18%; width:30%; height:10%;">
+        <div class="node gateway" id="n-gateway" style="left:35%; top:18%; width:30%; height:8%;" onclick="highlightNode(this)">
           <div class="icon">🔀</div>
           <div class="name">API Gateway</div>
-          <div class="meta">Spring Cloud Gateway :8087 · CORS · Authentication</div>
+          <div class="meta">:8087 · Spring Cloud Gateway</div>
         </div>
 
         <!-- Microservices -->
-        <div class="node user" id="n-user" style="left:5%; top:35%; width:12%; height:10%;">
+        <div class="node user" id="n-user" style="left:5%; top:35%; width:12%; height:10%;" onclick="highlightNode(this)">
           <div class="icon">👤</div>
           <div class="name">User Service</div>
-          <div class="meta">:8081 · Authentication</div>
+          <div class="meta">:8081</div>
         </div>
-        <div class="node product" id="n-product" style="left:20%; top:35%; width:12%; height:10%;">
+        <div class="node product" id="n-product" style="left:20%; top:35%; width:12%; height:10%;" onclick="highlightNode(this)">
           <div class="icon">📦</div>
-          <div class="name">Product Service</div>
-          <div class="meta">:8082 · Cached</div>
+          <div class="name">Product</div>
+          <div class="meta">:8082</div>
         </div>
-        <div class="node order" id="n-order" style="left:35%; top:35%; width:12%; height:10%;">
+        <div class="node order" id="n-order" style="left:35%; top:35%; width:12%; height:10%;" onclick="highlightNode(this)">
           <div class="icon">🧾</div>
-          <div class="name">Order Service</div>
-          <div class="meta">:8083 · Orders</div>
+          <div class="name">Order</div>
+          <div class="meta">:8083</div>
         </div>
-        <div class="node inventory" id="n-inventory" style="left:50%; top:35%; width:12%; height:10%;">
+        <div class="node inventory" id="n-inventory" style="left:50%; top:35%; width:12%; height:10%;" onclick="highlightNode(this)">
           <div class="icon">🏭</div>
-          <div class="name">Inventory Service</div>
-          <div class="meta">:8084 · Stock</div>
+          <div class="name">Inventory</div>
+          <div class="meta">:8084</div>
         </div>
-        <div class="node quotation" id="n-quotation" style="left:65%; top:35%; width:12%; height:10%;">
+        <div class="node quotation" id="n-quotation" style="left:65%; top:35%; width:12%; height:10%;" onclick="highlightNode(this)">
           <div class="icon">📋</div>
-          <div class="name">Quotation Service</div>
-          <div class="meta">:8085 · RFQ</div>
+          <div class="name">Quotation</div>
+          <div class="meta">:8085</div>
         </div>
-        <div class="node billing" id="n-billing" style="left:80%; top:35%; width:12%; height:10%;">
+        <div class="node billing" id="n-billing" style="left:80%; top:35%; width:12%; height:10%;" onclick="highlightNode(this)">
           <div class="icon">💰</div>
-          <div class="name">Billing Service</div>
-          <div class="meta">:8086 · Invoices</div>
+          <div class="name">Billing</div>
+          <div class="meta">:8086</div>
         </div>
 
         <!-- Infrastructure -->
-        <div class="node infra" id="n-eureka" style="left:10%; top:60%; width:15%; height:12%;">
+        <div class="node infra" id="n-eureka" style="left:10%; top:60%; width:15%; height:12%;" onclick="highlightNode(this)">
           <div class="icon">📡</div>
           <div class="name">Eureka Server</div>
-          <div class="meta">:8761 · Service Discovery</div>
+          <div class="meta">:8761</div>
         </div>
-        <div class="node infra" id="n-config" style="left:30%; top:60%; width:15%; height:12%;">
+        <div class="node infra" id="n-config" style="left:30%; top:60%; width:15%; height:12%;" onclick="highlightNode(this)">
           <div class="icon">🔧</div>
           <div class="name">Config Server</div>
-          <div class="meta">:8888 · Centralized Config</div>
+          <div class="meta">:8888</div>
         </div>
-        <div class="node infra" id="n-redis" style="left:50%; top:60%; width:15%; height:12%;">
+        <div class="node infra" id="n-redis" style="left:50%; top:60%; width:15%; height:12%;" onclick="highlightNode(this)">
           <div class="icon">🔴</div>
           <div class="name">Redis Cache</div>
-          <div class="meta">:6379 · High Performance</div>
+          <div class="meta">:6379</div>
         </div>
-        <div class="node infra" id="n-mysql" style="left:70%; top:60%; width:15%; height:12%;">
+        <div class="node infra" id="n-mysql" style="left:70%; top:60%; width:15%; height:12%;" onclick="highlightNode(this)">
           <div class="icon">🐬</div>
           <div class="name">MySQL 8</div>
-          <div class="meta">:3306 · 6 Schemas</div>
+          <div class="meta">:3306</div>
         </div>
       </div>
     </div>
   </div>
 
   <div class="console" id="console">
-    <div class="line idle">// Select a scenario above to see request flow…</div>
+    <div class="line idle">// Click any flow button above to watch animated request flow through the system…</div>
   </div>
 </section>
 
@@ -1137,27 +1147,6 @@
           <div style="font-size: 12px; font-weight: 700; color: #fff;">Production</div>
           <div style="font-size: 10px; color: var(--text-dim); margin-top: 8px;">Live System</div>
         </div>
-      </div>
-    </div>
-  </div>
-  
-  <div style="margin-top: 40px;">
-    <h3 style="font-size: 18px; margin-bottom: 20px; color: var(--cyan-bright);">Continuous Integration & Deployment</h3>
-    <div class="expandable">
-      <div class="expandable-header">
-        <span class="expandable-title">Build Pipeline</span>
-        <span class="expandable-icon">▼</span>
-      </div>
-      <div class="expandable-content">
-        <p style="color: var(--text-dim); line-height: 1.6; margin: 0;">
-          <b>1. Source Code Management:</b> Push to GitHub with branch protection rules and automated PR checks. <br><br>
-          <b>2. Build Stage:</b> Maven compiles, runs unit tests, and generates Docker images for each microservice. <br><br>
-          <b>3. Test Stage:</b> Integration tests validate service-to-service communication, API contracts, and database operations. <br><br>
-          <b>4. Security Scanning:</b> SonarQube analyzes code quality; Trivy scans Docker images for vulnerabilities. <br><br>
-          <b>5. Registry:</b> Images pushed to Docker Hub or private registry with semantic versioning. <br><br>
-          <b>6. Deployment:</b> Helm charts or Kustomize deploy to Kubernetes staging environment. <br><br>
-          <b>7. Smoke Tests:</b> Verify critical user flows in staging before production promotion.
-        </p>
       </div>
     </div>
   </div>
@@ -1300,9 +1289,6 @@ const technologies = {
         <li><b>Sealed Classes:</b> Fine-grained control over inheritance</li>
         <li><b>Text Blocks:</b> Multi-line strings for complex configurations</li>
       </ul>
-      
-      <h3>Real Project Usage:</h3>
-      <p>All microservices (User, Product, Order, Inventory, Quotation, Billing) are built using Java 17 with Spring Boot, leveraging its robust features for business logic, data access, and inter-service communication.</p>
     `
   },
   'spring-boot': {
@@ -1317,14 +1303,6 @@ const technologies = {
         <li><b>Embedded Servers:</b> Run with embedded Tomcat without separate deployment</li>
         <li><b>Microservice Friendly:</b> Built for building distributed systems</li>
         <li><b>Production Ready:</b> Built-in metrics, health checks, and actuators</li>
-      </ul>
-      
-      <h3>Core Components Used:</h3>
-      <ul>
-        <li><b>Spring Boot Starters:</b> Dependencies for web, data, security, cloud</li>
-        <li><b>Auto-Configuration:</b> Automatically configures Spring application based on classpath</li>
-        <li><b>Actuator:</b> Exposes operational endpoints for monitoring</li>
-        <li><b>Embedded Tomcat:</b> Self-contained, no external server needed</li>
       </ul>
       
       <h3>Microservices Pattern:</h3>
@@ -1344,12 +1322,6 @@ const technologies = {
         <li><b>API Gateway:</b> Spring Cloud Gateway for request routing and load balancing</li>
         <li><b>Circuit Breaker:</b> Resilience4j for fault tolerance</li>
       </ul>
-      
-      <h3>Why Spring Cloud?</h3>
-      <p>Managing distributed systems is complex. Spring Cloud abstracts this complexity, providing battle-tested patterns for service-to-service communication, configuration management, and failure handling.</p>
-      
-      <h3>Real Usage in Godavari:</h3>
-      <p>All 9 microservices communicate through Spring Cloud Gateway, register with Eureka for discovery, and fetch configuration from Config Server. This ensures decoupling, scalability, and resilience.</p>
     `
   },
   'spring-gateway': {
@@ -1358,20 +1330,8 @@ const technologies = {
       <h3>What is an API Gateway?</h3>
       <p>An API Gateway acts as a single entry point for all client requests. It routes requests to appropriate microservices, handles cross-cutting concerns, and provides a unified interface to the backend system.</p>
       
-      <h3>Why API Gateway Pattern?</h3>
-      <ul>
-        <li><b>Single Entry Point:</b> Clients don't need to know about individual services</li>
-        <li><b>Authentication:</b> Centralized JWT validation before routing</li>
-        <li><b>Rate Limiting:</b> Protect backend services from overload</li>
-        <li><b>Load Balancing:</b> Distribute requests across service instances</li>
-        <li><b>CORS:</b> Handle cross-origin requests from Angular frontend</li>
-      </ul>
-      
-      <h3>Port :8087 — Why This Port?</h3>
-      <p>The gateway runs on port 8087 and acts as the reverse proxy. All 100+ API endpoints are prefixed through this gateway. It's the only service exposed to the internet.</p>
-      
-      <h3>Request Flow Through Gateway:</h3>
-      <p>Frontend (:4200) → Gateway (:8087) → Microservice (:8081-8086) → Database → Response back through Gateway → Frontend</p>
+      <h3>Port :8087</h3>
+      <p>The gateway runs on port 8087 as the reverse proxy. All 100+ API endpoints are prefixed through this gateway. It's the only service exposed to the internet.</p>
     `
   },
   eureka: {
@@ -1379,9 +1339,6 @@ const technologies = {
     content: `
       <h3>What is Service Discovery?</h3>
       <p>In microservices architecture, services need to find each other dynamically. Service Discovery automatically maintains a registry of available service instances and their network locations.</p>
-      
-      <h3>The Problem Eureka Solves:</h3>
-      <p>With 9 microservices, hardcoding IP addresses and ports is impossible. Services scale up/down dynamically. Eureka maintains a live registry where services register themselves and discover others.</p>
       
       <h3>How Eureka Works:</h3>
       <ul>
@@ -1391,8 +1348,8 @@ const technologies = {
         <li><b>De-registration:</b> When service shuts down, it deregisters from Eureka</li>
       </ul>
       
-      <h3>Port :8761 — Eureka Dashboard</h3>
-      <p>Access at localhost:8761 to see all registered microservices in real-time. Shows service status, instance health, and uptime.</p>
+      <h3>Port :8761</h3>
+      <p>Access at localhost:8761 to see all registered microservices in real-time.</p>
     `
   },
   'config-server': {
@@ -1401,20 +1358,8 @@ const technologies = {
       <h3>What is Centralized Configuration?</h3>
       <p>Different environments (dev, staging, prod) require different configurations. Config Server maintains all environment-specific configurations centrally, avoiding hardcoded values in code.</p>
       
-      <h3>Configuration Items Managed:</h3>
-      <ul>
-        <li>Database connection strings and credentials</li>
-        <li>Redis cache configuration</li>
-        <li>JWT expiration times and secrets</li>
-        <li>Service endpoints and timeouts</li>
-        <li>Feature flags and toggles</li>
-      </ul>
-      
-      <h3>Port :8888 — Config Server Location</h3>
+      <h3>Port :8888</h3>
       <p>All microservices fetch configuration on startup from Config Server (:8888). Configuration is stored in Git, ensuring version control and audit trails.</p>
-      
-      <h3>Configuration Flow:</h3>
-      <p>Microservice startup → Request config from :8888 → Config Server fetches from Git repository → Returns environment-specific properties → Microservice uses these properties</p>
     `
   },
   jwt: {
@@ -1426,26 +1371,13 @@ const technologies = {
       <h3>JWT Structure:</h3>
       <pre style="background: #000; padding: 12px; border-radius: 6px; overflow-x: auto;">
 Header.Payload.Signature
-
-• Header: Algorithm used (HS256, RS256)
-• Payload: User claims (userId, role, email)
-• Signature: Server's digital signature
       </pre>
       
-      <h3>Why JWT for Microservices?</h3>
-      <ul>
-        <li><b>Stateless:</b> No session storage needed</li>
-        <li><b>Scalable:</b> Any service can validate token independently</li>
-        <li><b>Cross-Domain:</b> Works across different services and domains</li>
-        <li><b>Mobile Friendly:</b> Perfect for mobile and SPA applications</li>
-      </ul>
-      
-      <h3>Authentication Flow in Godavari:</h3>
+      <h3>Authentication Flow:</h3>
       <p>1. User submits credentials to POST /auth/login through Gateway<br>
       2. User Service validates and generates JWT<br>
-      3. Token returned to frontend, stored in localStorage<br>
-      4. All subsequent requests include token in Authorization header<br>
-      5. Gateway validates JWT before routing to microservices</p>
+      3. Token returned to frontend<br>
+      4. All subsequent requests include token in Authorization header</p>
     `
   },
   jpa: {
@@ -1454,196 +1386,72 @@ Header.Payload.Signature
       <h3>What is JPA?</h3>
       <p>Java Persistence API (JPA) is a specification for object-relational mapping. Spring Data JPA provides a repository abstraction on top of JPA, reducing boilerplate database code.</p>
       
-      <h3>Key Features:</h3>
-      <ul>
-        <li><b>CRUD Operations:</b> Automatic save, read, update, delete methods</li>
-        <li><b>Query Methods:</b> Derived queries from method names</li>
-        <li><b>Transactions:</b> Declarative transaction management via @Transactional</li>
-        <li><b>Lazy Loading:</b> Efficient data loading strategies</li>
-      </ul>
-      
-      <h3>Repository Pattern in Godavari:</h3>
-      <pre style="background: #000; padding: 12px; border-radius: 6px; overflow-x: auto;">
-public interface UserRepository extends JpaRepository&lt;User, Long&gt; {
-    Optional&lt;User&gt; findByEmail(String email);
-    List&lt;User&gt; findByRole(String role);
-}
-      </pre>
-      
-      <h3>Benefits:</h3>
+      <h3>Repository Pattern:</h3>
       <p>No SQL queries needed. Spring Data generates queries based on method names, providing type-safe database access.</p>
     `
   },
   mysql: {
     title: "MySQL 8.0 — Relational Database",
     content: `
-      <h3>What is MySQL?</h3>
-      <p>MySQL is a free, open-source relational database management system (RDBMS). It's one of the most popular databases for web applications due to reliability, performance, and ease of use.</p>
-      
       <h3>Database-Per-Service Pattern:</h3>
-      <p>Instead of one central database, Godavari uses 6 separate MySQL databases:</p>
-      <ul>
-        <li>godavari_users → User Service</li>
-        <li>godavari_products → Product Service</li>
-        <li>godavari_orders → Order Service</li>
-        <li>godavari_inventory → Inventory Service</li>
-        <li>godavari_quotations → Quotation Service</li>
-        <li>godavari_billing → Billing Service</li>
-      </ul>
-      
-      <h3>Why Database-Per-Service?</h3>
-      <ul>
-        <li><b>Autonomy:</b> Each service is independent, can change schema without affecting others</li>
-        <li><b>Scalability:</b> Database can be scaled independently</li>
-        <li><b>Technology Choice:</b> Each service could use different databases if needed</li>
-      </ul>
-      
-      <h3>Port :3306 — MySQL Connection</h3>
-      <p>All services connect to MySQL on port 3306. Connection strings include database name, ensuring data isolation between services.</p>
+      <p>Godavari uses 6 separate MySQL databases:<br>
+      • godavari_users → User Service<br>
+      • godavari_products → Product Service<br>
+      • godavari_orders → Order Service<br>
+      • godavari_inventory → Inventory Service<br>
+      • godavari_quotations → Quotation Service<br>
+      • godavari_billing → Billing Service</p>
     `
   },
   redis: {
-    title: "Redis 7-Alpine — High-Performance Cache",
+    title: "Redis 7-Alpine — Cache Layer",
     content: `
       <h3>What is Redis?</h3>
-      <p>Redis is an in-memory data structure store used as cache, message broker, and database. It provides sub-millisecond response times, making it ideal for caching frequently accessed data.</p>
+      <p>Redis is an in-memory data structure store used as cache. It provides sub-millisecond response times, making it ideal for caching frequently accessed data.</p>
       
-      <h3>Why Cache Layer?</h3>
+      <h3>What's Cached:</h3>
       <ul>
-        <li><b>Performance:</b> In-memory access is 10-100x faster than database queries</li>
-        <li><b>Reduce Load:</b> Database experiences fewer queries</li>
-        <li><b>User Experience:</b> Faster response times for end users</li>
+        <li>Product Catalog</li>
+        <li>Inventory Levels</li>
+        <li>User Sessions</li>
+        <li>API Responses</li>
       </ul>
-      
-      <h3>What's Cached in Godavari?</h3>
-      <ul>
-        <li><b>Product Catalog:</b> Frequently accessed, rarely changes</li>
-        <li><b>Inventory Levels:</b> Real-time stock information</li>
-        <li><b>User Sessions:</b> User authentication data</li>
-        <li><b>API Responses:</b> Computed results to reduce recalculation</li>
-      </ul>
-      
-      <h3>Cache-Aside Pattern:</h3>
-      <pre style="background: #000; padding: 12px; border-radius: 6px; overflow-x: auto;">
-1. Check Redis for key
-2. If found → Return cached value
-3. If not found → Query database
-4. Store result in Redis with expiration
-5. Return to client
-      </pre>
-      
-      <h3>Alpine Linux — Why?</h3>
-      <p>Redis image built on Alpine Linux is only 40MB vs 200MB for standard. Perfect for containerized environments, reducing deployment time and resource usage.</p>
     `
   },
   docker: {
     title: "Docker & Docker Compose — Containerization",
     content: `
-      <h3>What is Docker?</h3>
-      <p>Docker packages applications and their dependencies into containers—lightweight, standalone executables that run consistently across environments.</p>
-      
-      <h3>Container Advantages:</h3>
-      <ul>
-        <li><b>Consistency:</b> "Runs on my machine" solved—same on dev, staging, production</li>
-        <li><b>Isolation:</b> Each container is isolated, preventing dependency conflicts</li>
-        <li><b>Efficiency:</b> Lightweight compared to VMs</li>
-        <li><b>Scalability:</b> Orchestration tools (Kubernetes) manage multiple containers</li>
-      </ul>
-      
-      <h3>Godavari Container Stack:</h3>
-      <ul>
-        <li>Angular Frontend :4200</li>
-        <li>API Gateway :8087</li>
-        <li>User Service :8081</li>
-        <li>Product Service :8082</li>
-        <li>Order Service :8083</li>
-        <li>Inventory Service :8084</li>
-        <li>Quotation Service :8085</li>
-        <li>Billing Service :8086</li>
-        <li>MySQL Database :3306</li>
-        <li>Redis Cache :6379</li>
-        <li>Eureka Server :8761</li>
-        <li>Config Server :8888</li>
-      </ul>
-      
-      <h3>Docker Compose — Orchestrating Multiple Containers</h3>
-      <p>Docker Compose (docker-compose.yml) defines all services, networks, and volumes. Single command "docker-compose up" starts the entire system locally.</p>
+      <h3>Container Stack:</h3>
+      <p>Angular (:4200), API Gateway (:8087), User Service (:8081), Product Service (:8082), Order Service (:8083), Inventory Service (:8084), Quotation Service (:8085), Billing Service (:8086), MySQL (:3306), Redis (:6379), Eureka (:8761), Config Server (:8888)</p>
     `
   },
   angular: {
     title: "Angular 17 — Frontend Framework",
     content: `
-      <h3>What is Angular?</h3>
-      <p>Angular is a comprehensive TypeScript-based web application framework. It provides tools for building scalable, maintainable, single-page applications (SPAs).</p>
-      
-      <h3>Angular 17 Features Used:</h3>
-      <ul>
-        <li><b>Standalone Components:</b> Simplified component architecture</li>
-        <li><b>TypeScript:</b> Strong typing reduces runtime errors</li>
-        <li><b>RxJS Observables:</b> Reactive programming for async operations</li>
-        <li><b>Dependency Injection:</b> Loosely coupled, testable code</li>
-        <li><b>Angular Material:</b> Pre-built UI components for enterprise look</li>
-      </ul>
-      
       <h3>Frontend Architecture:</h3>
       <ul>
-        <li><b>Components:</b> Reusable UI blocks (ProductList, OrderForm, etc.)</li>
+        <li><b>Components:</b> Reusable UI blocks</li>
         <li><b>Services:</b> Business logic and HTTP communication</li>
         <li><b>Interceptors:</b> Inject JWT token into every request</li>
         <li><b>Guards:</b> Protect routes that require authentication</li>
       </ul>
       
-      <h3>Communication with Backend:</h3>
-      <p>Angular's HttpClient sends requests to API Gateway (:8087). All requests include JWT token. Responses are intercepted, and errors are handled centrally.</p>
-      
-      <h3>Port :4200 — Development Server</h3>
-      <p>Angular development server runs on port 4200 with hot-reload enabled. Changes to code automatically reflect in browser without refresh.</p>
+      <h3>Port :4200</h3>
+      <p>Angular development server runs on port 4200 with hot-reload enabled.</p>
     `
   }
 };
 
 // ============ PATTERN DEFINITIONS ============
 const patterns = [
-  {
-    name: "API Gateway Pattern",
-    icon: "🔀",
-    explanation: "Single entry point for all client requests. Routes to appropriate microservices, handles authentication, rate limiting, and CORS. Implemented via Spring Cloud Gateway on :8087."
-  },
-  {
-    name: "Service Discovery",
-    icon: "📡",
-    explanation: "Services register themselves with Eureka on startup. Other services query Eureka to find instances dynamically. Eliminates hardcoded IPs and enables automatic scaling."
-  },
-  {
-    name: "Database-Per-Service",
-    icon: "🗄️",
-    explanation: "Each microservice has its own database (godavari_users, godavari_orders, etc.). Ensures autonomy, allows independent scaling, and prevents tight coupling through shared data."
-  },
-  {
-    name: "Circuit Breaker",
-    icon: "🔌",
-    explanation: "Detects service failures and prevents cascading failures. When a service fails repeatedly, circuit breaker prevents further requests, allowing time for recovery."
-  },
-  {
-    name: "Cache-Aside",
-    icon: "💾",
-    explanation: "Check cache first before hitting database. If miss, query database and store result in cache. Used for products and inventory to reduce database load."
-  },
-  {
-    name: "Repository Pattern",
-    icon: "📚",
-    explanation: "Abstracts data access logic. Services don't know about database specifics, only interact with repository interface. Makes testing and switching databases easier."
-  },
-  {
-    name: "Dependency Injection",
-    icon: "🔗",
-    explanation: "Spring automatically injects dependencies into beans. Promotes loose coupling, makes testing easier, and improves maintainability. Uses @Autowired annotation."
-  },
-  {
-    name: "DTO (Data Transfer Object)",
-    icon: "📦",
-    explanation: "Separates API model from internal domain model. Controllers return DTOs, services work with internal objects. Provides API versioning independence and security."
-  }
+  { name: "API Gateway Pattern", icon: "🔀", explanation: "Single entry point for all client requests via Spring Cloud Gateway on :8087." },
+  { name: "Service Discovery", icon: "📡", explanation: "Netflix Eureka maintains registry of available service instances dynamically." },
+  { name: "Database-Per-Service", icon: "🗄️", explanation: "Each microservice has its own database ensuring autonomy and independence." },
+  { name: "Circuit Breaker", icon: "🔌", explanation: "Prevents cascading failures by detecting and handling service failures." },
+  { name: "Cache-Aside", icon: "💾", explanation: "Check cache first before database. Redis stores frequently accessed data." },
+  { name: "Repository Pattern", icon: "📚", explanation: "Abstracts data access logic away from business logic." },
+  { name: "Dependency Injection", icon: "🔗", explanation: "Spring automatically injects dependencies promoting loose coupling." },
+  { name: "DTO Pattern", icon: "📦", explanation: "Separates API model from internal domain model for security." }
 ];
 
 // ============ WORKFLOW DEFINITIONS ============
@@ -1655,13 +1463,13 @@ const workflows = {
       "Request reaches API Gateway (:8087)",
       "Gateway routes to User Service (:8081)",
       "User Service validates credentials against database",
-      "If valid, generates JWT token containing userId, role, email",
-      "JWT signed with server secret and returned to frontend",
-      "Frontend stores JWT in localStorage (or sessionStorage)",
+      "JWT token generated with userId, role, email",
+      "Token signed with server secret and returned to frontend",
+      "Frontend stores JWT in localStorage",
       "Subsequent requests include JWT in Authorization header",
       "Gateway validates JWT signature before routing",
       "Microservices extract userId from JWT payload",
-      "Access is granted without hitting User Service again",
+      "Access granted without hitting User Service again",
       "Token expiration triggers refresh token exchange"
     ]
   },
@@ -1669,18 +1477,18 @@ const workflows = {
     title: "Order Processing Workflow",
     steps: [
       "Customer submits order from Angular frontend",
-      "Angular sends POST /orders with JWT token to Gateway",
+      "POST /orders sent to Gateway with JWT token",
       "Gateway authenticates JWT and routes to Order Service (:8083)",
-      "Order Service creates order record in godavari_orders database",
+      "Order Service creates order record in godavari_orders",
       "Order Service calls Inventory Service via REST API",
       "Inventory Service deducts stock from godavari_inventory",
-      "Updated inventory cached in Redis for fast access",
+      "Updated inventory cached in Redis",
       "Order Service returns order confirmation to frontend",
-      "Admin reviews order and updates status to CONFIRMED",
+      "Admin updates status to CONFIRMED",
       "Status update triggers invoice generation in Billing Service",
       "Billing Service creates invoice with GST calculation",
       "Invoice stored in godavari_billing database",
-      "Email notification sent to customer (async via messaging)"
+      "Email notification sent to customer"
     ]
   },
   product: {
@@ -1695,7 +1503,7 @@ const workflows = {
       "Admin creates new product via POST /products",
       "Product inserted into godavari_products database",
       "Redis cache is invalidated/cleared",
-      "Next product list request fetches fresh data from MySQL",
+      "Next product list request fetches fresh data",
       "Cache is rebuilt for future requests"
     ]
   },
@@ -1708,9 +1516,9 @@ const workflows = {
       "Stock transaction logged: type (IN/OUT), quantity, timestamp",
       "Inventory data cached in Redis for real-time display",
       "When order placed, inventory automatically deducted",
-      "Stock movement logged in godavari_inventory.stock_transactions",
-      "Supplier can be triggered if stock drops to reorder point",
-      "Purchase order created automatically for low-stock items",
+      "Stock movement logged in stock_transactions",
+      "Supplier triggered if stock drops to reorder point",
+      "Purchase order created automatically",
       "Incoming stock verified and inventory updated",
       "Cache refreshed to reflect latest stock levels"
     ]
@@ -1718,8 +1526,8 @@ const workflows = {
   quotation: {
     title: "Quotation & RFQ Process",
     steps: [
-      "Customer submits RFQ (Request For Quotation) from portal",
-      "Angular sends POST /quotations to Gateway",
+      "Customer submits RFQ from portal",
+      "POST /quotations sent to Gateway",
       "Quotation Service creates RFQ record in godavari_quotations",
       "RFQ marked as SUBMITTED, awaiting admin approval",
       "Sales admin reviews quotation request",
@@ -1736,18 +1544,118 @@ const workflows = {
     steps: [
       "Order status updated to CONFIRMED or SHIPPED",
       "Billing Service triggered to generate invoice",
-      "Retrieves order details from godavari_orders (via cache/call)",
-      "Calculates GST: CGST (9%) + SGST (9%) = 18% for Indian tax",
+      "Retrieves order details from godavari_orders",
+      "Calculates GST: CGST (9%) + SGST (9%) = 18%",
       "Creates invoice record in godavari_billing.invoices",
-      "Invoice number generated with format: INV-YYYYMMDD-XXXXX",
-      "PDF generated (optional) using iText/Apache PDFBox",
+      "Invoice number generated: INV-YYYYMMDD-XXXXX",
+      "PDF generated using iText/Apache PDFBox",
       "Invoice emailed to customer with payment details",
       "Payment status tracked: PENDING → PAID → RECONCILED",
       "Finance team uses billing module for reconciliation",
-      "Reports generated for revenue analysis and tax filing"
+      "Reports generated for revenue analysis"
     ]
   }
 };
+
+let animationRunning = false;
+
+// ============ FLOW ANIMATION ============
+async function runFlow(type) {
+  if (animationRunning) return;
+  animationRunning = true;
+
+  clearConsole();
+  const flowSteps = getFlowSteps(type);
+
+  for (const step of flowSteps) {
+    await new Promise(r => setTimeout(r, 400));
+    
+    if (step.node) {
+      highlightNodeElement(step.node);
+    }
+    
+    log(step.log);
+  }
+
+  animationRunning = false;
+}
+
+function getFlowSteps(type) {
+  const flows = {
+    overview: [
+      { log: '<span class="tag tag-get">SYSTEM</span> Godavari Architecture Overview', node: 'n-frontend' },
+      { log: '<span class="ts">[INFO]</span> 9 Microservices registered with Eureka', node: 'n-eureka' },
+      { log: '<span class="ts">[INFO]</span> 6 MySQL databases initialized', node: 'n-mysql' },
+      { log: '<span class="ts">[INFO]</span> Redis cache layer active', node: 'n-redis' },
+      { log: '<span class="ts">[INFO]</span> API Gateway (:8087) listening', node: 'n-gateway' },
+      { log: '<span class="ts">[INFO]</span> Config Server (:8888) distributing configs', node: 'n-config' },
+      { log: '<span class="res">✓ System ready for requests</span>', node: null }
+    ],
+    login: [
+      { log: '<span class="tag tag-post">POST</span> /auth/login · email: user@example.com', node: 'n-frontend' },
+      { log: '<span class="tag tag-post">POST</span> Request enters API Gateway (:8087)', node: 'n-gateway' },
+      { log: '<span class="ts">[ROUTE]</span> Gateway routes to User Service (:8081)', node: 'n-user' },
+      { log: '<span class="tag tag-post">POST</span> User Service validates credentials', node: 'n-user' },
+      { log: '<span class="ts">[QUERY]</span> SELECT * FROM godavari_users WHERE email=?', node: 'n-mysql' },
+      { log: '<span class="tag tag-auth">JWT</span> Generating JWT token', node: 'n-user' },
+      { log: '<span class="ts">[TOKEN]</span> eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...', node: 'n-user' },
+      { log: '<span class="res">✓ 200 OK · JWT returned to frontend</span>', node: 'n-frontend' }
+    ],
+    order: [
+      { log: '<span class="tag tag-post">POST</span> /orders (with JWT token)', node: 'n-frontend' },
+      { log: '<span class="tag tag-auth">AUTH</span> Gateway validates JWT signature', node: 'n-gateway' },
+      { log: '<span class="ts">[ROUTE]</span> Gateway routes to Order Service (:8083)', node: 'n-order' },
+      { log: '<span class="tag tag-post">POST</span> Order Service creates order', node: 'n-order' },
+      { log: '<span class="ts">[INSERT]</span> INSERT INTO godavari_orders VALUES (...)', node: 'n-mysql' },
+      { log: '<span class="ts">[INTER-SERVICE]</span> Order calls Inventory Service', node: 'n-inventory' },
+      { log: '<span class="tag tag-post">POST</span> Deduct stock from inventory', node: 'n-inventory' },
+      { log: '<span class="tag tag-cache">CACHE</span> Update inventory cache in Redis', node: 'n-redis' },
+      { log: '<span class="res">✓ Order ORD-20240705-1234 created successfully</span>', node: 'n-frontend' }
+    ],
+    product: [
+      { log: '<span class="tag tag-get">GET</span> /products (paginated)', node: 'n-frontend' },
+      { log: '<span class="ts">[ROUTE]</span> Gateway routes to Product Service (:8082)', node: 'n-gateway' },
+      { log: '<span class="tag tag-cache">CACHE</span> Check Redis for products key', node: 'n-redis' },
+      { log: '<span class="res">✓ CACHE HIT: 1247 products from Redis (0.8ms)</span>', node: 'n-redis' },
+      { log: '<span class="ts">[SAVED]</span> Database query avoided, saving ~50ms', node: 'n-mysql' },
+      { log: '<span class="res">✓ 200 OK · Products returned from cache</span>', node: 'n-frontend' }
+    ],
+    inventory: [
+      { log: '<span class="tag tag-get">GET</span> /inventory/low-stock', node: 'n-frontend' },
+      { log: '<span class="ts">[ROUTE]</span> Gateway routes to Inventory Service (:8084)', node: 'n-gateway' },
+      { log: '<span class="tag tag-cache">CACHE</span> Check Redis for inventory', node: 'n-redis' },
+      { log: '<span class="ts">[QUERY]</span> SELECT * FROM godavari_inventory WHERE qty < threshold', node: 'n-mysql' },
+      { log: '<span class="ts">[ALERT]</span> 23 products below reorder level', node: 'n-inventory' },
+      { log: '<span class="tag tag-cache">CACHE</span> Update inventory cache', node: 'n-redis' },
+      { log: '<span class="res">✓ Low stock alert generated</span>', node: 'n-frontend' }
+    ],
+    quotation: [
+      { log: '<span class="tag tag-post">POST</span> /quotations · Customer RFQ', node: 'n-frontend' },
+      { log: '<span class="ts">[ROUTE]</span> Gateway routes to Quotation Service (:8085)', node: 'n-gateway' },
+      { log: '<span class="tag tag-post">POST</span> Create quotation record', node: 'n-quotation' },
+      { log: '<span class="ts">[INSERT]</span> INSERT INTO godavari_quotations VALUES (...)', node: 'n-mysql' },
+      { log: '<span class="ts">[STATUS]</span> RFQ-20240705-5678 marked SUBMITTED', node: 'n-quotation' },
+      { log: '<span class="ts">[NOTIFY]</span> Sales team notified', node: 'n-quotation' },
+      { log: '<span class="res">✓ Quotation RFQ-20240705-5678 created</span>', node: 'n-frontend' }
+    ]
+  };
+
+  return flows[type] || flows.overview;
+}
+
+// ============ HIGHLIGHT NODE ============
+function highlightNode(element) {
+  document.querySelectorAll('.node').forEach(n => n.classList.remove('active'));
+  element.classList.add('active');
+  setTimeout(() => element.classList.remove('active'), 800);
+}
+
+function highlightNodeElement(nodeId) {
+  const element = document.getElementById(nodeId);
+  if (element) {
+    highlightNode(element);
+  }
+}
 
 // ============ CONSOLE LOGGING ============
 function log(html) {
@@ -1761,40 +1669,6 @@ function log(html) {
 
 function clearConsole() {
   document.getElementById('console').innerHTML = '';
-}
-
-// ============ DEMO RUNNER ============
-function runDemo(type) {
-  clearConsole();
-  
-  if (type === 'overview') {
-    log('<span class="tag tag-get">SYSTEM</span> Godavari Architecture Overview Loaded');
-    log('<span class="ts">[INFO]</span> 9 Microservices registered with Eureka');
-    log('<span class="ts">[INFO]</span> 6 MySQL databases initialized');
-    log('<span class="ts">[INFO]</span> Redis cache layer active');
-    log('<span class="ts">[INFO]</span> API Gateway (:8087) listening');
-    log('<span class="ts">[INFO]</span> Config Server (:8888) distributing configs');
-    log('<span class="res">✓ System ready for requests</span>');
-  } else if (type === 'auth') {
-    log('<span class="tag tag-post">POST</span> /auth/login');
-    setTimeout(() => log('<span class="tag tag-auth">AUTH</span> Validating credentials'), 200);
-    setTimeout(() => log('<span class="ts">[INFO]</span> User found in godavari_users'), 400);
-    setTimeout(() => log('<span class="tag tag-auth">JWT</span> Generating token'), 600);
-    setTimeout(() => log('<span class="res">✓ 200 OK · eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</span>'), 800);
-    setTimeout(() => log('<span class="ts">[INFO]</span> Token stored in frontend localStorage'), 1000);
-  } else if (type === 'order') {
-    log('<span class="tag tag-post">POST</span> /orders (with JWT)');
-    setTimeout(() => log('<span class="ts">[INFO]</span> Order created in godavari_orders'), 300);
-    setTimeout(() => log('<span class="tag tag-post">POST</span> /inventory/update (OUT)'), 600);
-    setTimeout(() => log('<span class="ts">[INFO]</span> Stock deducted from godavari_inventory'), 800);
-    setTimeout(() => log('<span class="tag tag-cache">CACHE</span> Inventory cache invalidated'), 1000);
-    setTimeout(() => log('<span class="res">✓ Order processing complete</span>'), 1200);
-  } else if (type === 'cache') {
-    log('<span class="tag tag-get">GET</span> /products');
-    setTimeout(() => log('<span class="tag tag-cache">CACHE</span> Checking Redis...'), 100);
-    setTimeout(() => log('<span class="res">✓ HIT: 1247 products from Redis (0.8ms)</span>'), 300);
-    setTimeout(() => log('<span class="ts">[INFO]</span> Database query avoided, saving 50ms'), 500);
-  }
 }
 
 // ============ TECH DETAIL MODAL ============
@@ -1858,7 +1732,6 @@ function buildPatternsSection() {
   html += '</div>';
   container.innerHTML = html;
   
-  // Add expand/collapse handlers
   document.querySelectorAll('.expandable-header').forEach(header => {
     header.addEventListener('click', function() {
       this.parentElement.classList.toggle('open');
@@ -1914,7 +1787,6 @@ document.addEventListener('DOMContentLoaded', function() {
   buildTechDetailsSection();
   updateMetrics();
   
-  // Close modals on background click
   document.getElementById('techModal').addEventListener('click', function(e) {
     if (e.target === this) this.classList.remove('active');
   });
@@ -1923,11 +1795,9 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.target === this) this.classList.remove('active');
   });
   
-  // Initial demo
-  runDemo('overview');
+  runFlow('overview');
 });
 
-// ============ SMOOTH SCROLL ============
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', function(e) {
     e.preventDefault();
