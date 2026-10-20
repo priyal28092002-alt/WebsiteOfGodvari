@@ -1,0 +1,42 @@
+Methods of Thread Class
+
+Thread Lifecycle Methods
+1) start() – Starts a new thread and calls the run() method.
+2) run() – Defines the code that runs in the thread.
+3) stop() (Deprecated) – Stops the thread forcefully (not recommended).
+4) suspend() (Deprecated) – Suspends the thread (not recommended).
+5) resume() (Deprecated) – Resumes a suspended thread (not recommended).
+6) destroy() (Deprecated) – Stops the thread (not recommended).
+
+
+Thread Control Methods
+1) sleep(long millis) – Puts the thread to sleep for a specified time.
+2) join() – Waits for the thread to finish execution.
+3) join(long millis) – Waits for the thread to finish execution for a given time.
+4) yield() – Suggests the thread scheduler to allow other threads to execute.
+5) interrupt() – Interrupts a sleeping or waiting thread.
+6) isInterrupted() – Checks if the thread has been interrupted.
+7) interrupted() – Checks if the current thread has been interrupted.
+
+
+Thread Priority & Naming
+1) setName(String name) – Assigns a name to the thread.
+2) getName() – Returns the thread's name.
+3) setPriority(int priority) – Sets thread priority (MIN_PRIORITY=1, NORM_PRIORITY=5, MAX_PRIORITY=10).
+4) getPriority() – Gets the thread’s priority.
+5) setDaemon(boolean on) – Marks the thread as a daemon thread.
+6) isDaemon() – Checks if the thread is a daemon thread.
+
+
+Thread Status & Information
+1) isAlive() – Checks if the thread is still running.
+2) activeCount() (Static Method) – Returns the number of active threads.
+3) currentThread() (Static Method) – Returns a reference to the currently executing thread.
+4) holdsLock(Object obj) (Static Method) – Checks if the current thread holds the lock on the given object.
+5) dumpStack() (Static Method) – Prints the stack trace of the current thread.
+6) getState() – Returns the current state of the thread (NEW, RUNNABLE, BLOCKED, WAITING, etc.).
+
+
+
+https://chatgpt.com/share/679f8595-e288-8002-bd7d-798d0d92fbc5
+

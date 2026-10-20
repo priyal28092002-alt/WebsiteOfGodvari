@@ -1,0 +1,282 @@
+===============================================================================
+COMPREHENSIVE CODING GUIDE 
+===============================================================================
+
+PROJECT: Java_Programming
+PACKAGES: com.example.arrays & com.example.String
+
+===============================================================================
+ARRAY TECHNIQUES (9 Core Techniques)
+===============================================================================
+
+Location: com.example.arrays
+
+1. SlidingWindowTechnique.java
+   → Max/min sum of k consecutive elements
+   → Smallest/longest subarray with condition
+   → Use for: Consecutive elements, contiguous subarrays
+   
+2. TwoPointerTechnique.java
+   → Two sum, remove duplicates, partition
+   → Container with most water, Dutch National Flag
+   → Use for: Sorted arrays, pairs, comparing ends
+   
+3. PrefixSumTechnique.java
+   → Range sum queries, equilibrium index
+   → Kadane's algorithm, product except self
+   → Use for: Multiple queries, subarray sums
+   
+4. ArrayRotationTechnique.java
+   → Rotate left/right, search in rotated sorted
+   → Maximum circular subarray sum
+   → Use for: Rotation, circular patterns
+   
+5. FrequencyCountingTechnique.java
+   → Find duplicates, majority element
+   → Top K frequent, subarray with sum 0
+   → Use for: Counting, frequency analysis
+   
+6. SortingBasedTechnique.java
+   → Three sum, merge intervals, meeting rooms
+   → Minimum platforms, closest pairs
+   → Use for: Intervals, pairs after sorting
+   
+7. InPlaceManipulation.java
+   → Move zeros, segregate, cyclic sort
+   → Find duplicates without extra space
+   → Use for: O(1) space constraint
+   
+8. StackBasedTechnique.java
+   → Next Greater Element, Stock Span
+   → Largest Rectangle, Rain Water Trapping
+   → Use for: Monotonic sequences, histogram
+   
+9. MathematicalTechnique.java
+   → Find missing (XOR, sum formula)
+   → Bit manipulation, GCD/LCM, subsets
+   → Use for: Formula-based, bitwise operations
+
+10. TechniqueSelectionGuide.java
+    → Decision tree and quick reference
+
+===============================================================================
+STRING TECHNIQUES (7 Core Techniques)
+===============================================================================
+
+Location: com.example.String
+
+1. StringTwoPointerTechnique.java
+   → Palindrome check, reverse string/words
+   → Remove adjacent duplicates, rotation check
+   → Use for: Palindrome, reversal, comparing ends
+   
+2. StringFrequencyTechnique.java
+   → Anagram check, group anagrams
+   → First non-repeating, longest substring without repeating
+   → Use for: Anagrams, counting, unique characters
+   
+3. StringManipulationTechnique.java
+   → Case conversions, capitalize
+   → Remove vowels/spaces/digits, extract characters
+   → Use for: Transformation, formatting
+   
+4. StringPatternMatchingTechnique.java
+   → Find pattern, count occurrences
+   → Longest common prefix, wildcard matching
+   → Use for: Search, pattern finding
+   
+5. StringSortingTechnique.java
+   → Sort lexicographically, by length, by frequency
+   → Largest number, version comparison
+   → Use for: Ordering, comparison
+   
+6. StringSubstringSubsequence.java
+   → All substrings/subsequences
+   → Longest common substring/subsequence (DP)
+   → Use for: Substring generation, DP problems
+   
+7. StringValidationTechnique.java
+   → Password strength, balanced brackets
+   → Valid number/email/IP, pangram check
+   → Use for: Validation, format checking
+
+8. StringTechniqueSelectionGuide.java
+   → Decision tree and quick reference
+
+===============================================================================
+HOW TO USE THIS RESOURCE
+===============================================================================
+
+STEP 1: Understand the Pattern
+   → Read TechniqueSelectionGuide files first (Array & String)
+   → Learn to recognize problem patterns from keywords
+   
+STEP 2: Master One Technique at a Time
+   → Pick one technique file
+   → Run the program and study the output
+   → Understand WHY the technique works
+   → Code along and modify examples
+   
+STEP 3: Practice Variations
+   → Each technique file has multiple problems
+   → Solve similar problems on your own
+   → Don't just memorize - understand the concept
+   
+STEP 4: Pattern Recognition
+   → Practice identifying technique from problem statement
+   → Look for keywords: "consecutive", "subarray", "palindrome", etc.
+   → Use decision trees in guide files
+   
+STEP 5: Mixed Practice
+   → Once comfortable with all techniques
+   → Practice random problems
+   → Time yourself
+   
+STEP 6: Interview Simulation
+   → Solve problems without looking at reference
+   → Explain your approach out loud
+   → Optimize after getting working solution
+
+===============================================================================
+TECHNIQUE SELECTION - QUICK REFERENCE
+===============================================================================
+
+ARRAYS:
+Consecutive elements      → Sliding Window
+Sorted array + pairs      → Two Pointer
+Range queries            → Prefix Sum
+Rotation problems        → Array Rotation
+Duplicates/frequency     → Frequency Counting
+Intervals/meetings       → Sorting-Based
+O(1) space needed        → In-Place
+Next greater/smaller     → Stack-Based
+Missing numbers/XOR      → Mathematical
+
+STRINGS:
+Palindrome               → Two Pointer
+Anagram                  → Frequency Counting
+Case/format change       → Manipulation
+Find pattern             → Pattern Matching
+Sort/compare             → Sorting
+All substrings           → Substring/Subsequence
+Validate format          → Validation
+
+===============================================================================
+COMPLEXITY TARGETS FOR INTERVIEWS
+===============================================================================
+
+OPTIMAL TIME COMPLEXITIES:
+O(n)     - Single pass (most array/string traversals)
+O(n log n) - When sorting is needed
+O(n²)    - Nested loops (acceptable for small n)
+O(2^n)   - Exponential (only for small inputs)
+
+SPACE OPTIMIZATION:
+O(1)     - In-place (preferred when possible)
+O(n)     - Extra array/map (acceptable)
+O(n²)    - DP table (for specific problems)
+
+===============================================================================
+COMMON MISTAKES TO AVOID
+===============================================================================
+
+1. Not checking edge cases (null, empty, single element)
+2. Off-by-one errors in loops
+3. Not handling string immutability (use StringBuilder)
+4. Forgetting to handle integer overflow
+5. Not optimizing from brute force
+6. Assuming sorted when not specified
+7. Confusing substring vs subsequence
+8. Not considering negative numbers in arrays
+
+===============================================================================
+INTERVIEW DAY CHECKLIST
+===============================================================================
+
+✓ Clarify problem requirements
+✓ Ask about edge cases
+✓ Discuss approach before coding
+✓ Start with brute force, then optimize
+✓ Explain time/space complexity
+✓ Test with examples
+✓ Handle edge cases in code
+✓ Use meaningful variable names
+✓ Add comments for non-obvious logic
+
+===============================================================================
+KEY FORMULAS & PROPERTIES
+===============================================================================
+
+ARRAYS:
+- Sum 1 to n: n*(n+1)/2
+- Subarray count: n*(n+1)/2
+- XOR property: a^a = 0, a^0 = a
+- Two sum in sorted: O(n) with two pointers
+
+STRINGS:
+- Substrings: n*(n+1)/2
+- Subsequences: 2^n
+- ASCII: 'A'=65, 'a'=97, difference=32
+- Anagram: Same frequency of all characters
+
+===============================================================================
+RESOURCES STRUCTURE
+===============================================================================
+
+Java_Programming/
+└── src/com/example/
+    ├── arrays/
+    │   ├── 9 technique files
+    │   ├── TechniqueSelectionGuide.java
+    │   └── README.txt
+    └── String/
+        ├── 7 technique files
+        ├── StringTechniqueSelectionGuide.java
+        └── STRING_README.txt
+
+All files are:
+✓ Compilable and runnable
+✓ Self-contained with examples
+✓ Well-commented with explanations
+✓ Production-quality code
+✓ Interview-ready patterns
+
+===============================================================================
+SUCCESS METRICS
+===============================================================================
+
+BEGINNER (Week 1-2):
+□ Understand all 16 techniques
+□ Can identify technique from problem
+□ Solve easy problems in 15 minutes
+
+INTERMEDIATE (Week 3-4):
+□ Solve medium problems in 30 minutes
+□ Optimize solutions independently
+□ Explain approach clearly
+
+ADVANCED (Week 5-6):
+□ Solve hard problems in 45 minutes
+□ Handle edge cases automatically
+□ Choose optimal technique quickly
+□ Combine techniques when needed
+
+===============================================================================
+FINAL NOTES
+===============================================================================
+
+These 16 core techniques (9 array + 7 string) form the foundation for
+solving 90%+ of coding problems in TCS NQT Prime and similar interviews.
+
+Focus on:
+1. PATTERN RECOGNITION - Identify technique from problem
+2. CORE CONCEPTS - Understand WHY, not just HOW
+3. PRACTICE - Solve variations, not just memorize
+4. OPTIMIZATION - Always think about time/space tradeoffs
+
+The goal is not to memorize solutions, but to build problem-solving
+intuition through understanding core patterns.
+
+Good luck with your preparation! 🚀
+
+===============================================================================

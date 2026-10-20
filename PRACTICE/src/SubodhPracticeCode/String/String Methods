@@ -1,0 +1,109 @@
+String (Immutable)
+a. Defined in java.lang.String
+b. Immutable (cannot be changed after creation)
+c. Stored in the String Pool for memory optimization
+d. Supports + operator for concatenation
+
+Example:
+String s1 = "Hello";  
+String s2 = s1 + " World";  // New object is created
+
+
+1. charAt(int index) - return type of method is char
+	This method is used to return the character present at given index.
+
+2. length() - return type of method is int
+	This method is used to return the total number of characters present in the string.
+
+3. equals(String str) - return type is boolean
+	This is used to compare two string data and return true if both are same. This method also 	checks for the case.
+
+4. equalsIgnoreCase(String str) - return type is boolean
+	This is used to compare two string data and return true if both are same. This method does not 	checks for the case.
+
+5. trim() - return type of method is String.
+	This is used to remove the starting and ending spaces of the string.
+
+6. toCharArray() - return type is char[]
+	This method is used to convert all the characters of string into character array.
+
+7. toUpperCase() - return type is String
+	This method is used to convert all lowercase character into uppercase character.
+
+8. toLowerCase() - return type is String
+	This method is used to convert all uppercase character into lowercase character.
+
+9. split(String str) - return type is String array
+	This method is used to break the string based on the given string and store in string array.
+
+10. replace(char old, char new) - return type is String.
+	This method is used to replace all the occurrence old character
+	with the new character.
+
+11. replace(String old, String new) - return type is String.
+	This method is used to replace all the occurrence of old String
+	with the new String.
+
+12. indexOf(char c) - return type is int.
+	This method is used to return the index of first occurrence of the character in the string. If 	not found then return -1.
+
+13. indexOf(char c, int index) - return type is int.
+	This method is used to return the index of the specified charcter
+	after the specified index else return -1.
+
+14. indexOf(String str) - return type is int.
+	This method is used to return the index of first occurrence of the character sequence in the 	string. If not found then return -1.
+
+15. lastIndexOf(char c) - return type is int.
+	This method is used to return the index of the specified character
+	from the end of the String.
+
+16. lastIndexOf(char c, int i) - return type is int.
+	This method is used to return the index of the specified character
+	from the end after the specified index of the String.
+
+17. substring(int beginIndex) - return type is String.
+	This method is used to return a part of the string starting from 
+	the given index.
+
+18. substring(int beginIndex, int endIndex) - return type is String
+	This method is used to return a part of the string which starts
+	from the given begin index and ends at the given end index.
+	The begin index is included but the end index is excluded.
+
+19. startsWith(String str) - return type is boolean
+	This method is used to check if the String is starting with the 
+	specified string.
+
+20. endsWith(String str) - return type is boolean
+	This method is used to check if the String is ending with the 
+	specified string.
+
+21. contains(String str) - return type is boolean.
+	This method is used to check if the specified string sequence is 
+	present or not.
+
+22. isBlank() - return type is boolean
+	This method returns true if the string is empty or contains only white space. This 	method was introduced in Java 11. If the string contains only white spaces, then applying this 	method will return true .
+
+23. isEmpty() - return type is boolean
+	This method is used to check if the string is empty or not.
+
+24. compareTo(String str) - return type is int.
+	This method is used to compare the string object lexographically.
+
+25. compareToIgnoreCase(String str) - return type is int.
+	This method is used to compare the string object lexographically by ignoring the case.
+
+26. concat(String str) - return type is String.
+	This method is used to join(concatenate) two strings.
+
+27. lastIndexOf(String str) - return type is int.
+	This method is used to return the index of the specified character sequence
+	from the end of the String.
+
+28. strip(String str) - return type is String
+	It returns a string, with all leading and trailing white space removed
+
+29. repeat(int count) - return type is String
+	It concatenates same string count times.

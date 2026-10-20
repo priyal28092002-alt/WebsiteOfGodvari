@@ -1,0 +1,71 @@
+StringBuilder (Mutable & Not Thread-Safe)
+a. Defined in java.lang.StringBuilder
+b. Mutable (like StringBuffer)
+c. Not thread-safe (faster in single-threaded environments)
+d. Better performance than StringBuffer when synchronization is not needed
+Example:
+StringBuilder sb = new StringBuilder("Hello");
+sb.append(" World");
+System.out.println(sb);  // Output: Hello World
+
+
+
+Methods of String Builder Class
+
+A. Modification Methods
+1) append(String str) – Adds the given string to the end.
+
+       StringBuilder sb = new StringBuilder("Hello");
+       sb.append(" World");  // Hello World
+
+2) insert(int offset, String str) – Inserts the string at the specified position.
+
+       sb.insert(5, " Java");  // Hello Java World
+
+3) replace(int start, int end, String str) – Replaces characters between start and end.
+
+       sb.replace(6, 10, "Python");  // Hello Python World
+
+4) delete(int start, int end) – Deletes characters between start and end.
+
+       sb.delete(5, 12);  // Hello World
+
+5) deleteCharAt(int index) – Deletes the character at the specified index.
+
+       sb.deleteCharAt(2);  // Heo World
+       
+6) reverse() – Reverses the string.
+
+       sb.reverse();  // dlroW olleH
+       
+       
+B. Information & Utility Methods
+1)length() – Returns the number of characters in the StringBuilder.
+
+       int len = sb.length();
+
+2) capacity() – Returns the current capacity of the StringBuilder object.
+
+       int cap = sb.capacity();
+       
+3) charAt(int index) – Returns the character at the given position.
+
+       char ch = sb.charAt(3);  // 'l'
+       
+4) setCharAt(int index, char ch) – Changes a character at the specified position.
+ 
+       sb.setCharAt(2, 'X');  // HeXlo World
+
+5) substring(int start) – Returns the substring from the specified start index.
+
+       String sub = sb.substring(5);  // "World"
+
+6) substring(int start, int end) – Returns the substring between start and end - 1.
+ 
+       String sub = sb.substring(3, 7);  // "lo W"
+       
+     
+C. Conversion Method
+1) toString() – Converts StringBuilder into a String.
+
+       String str = sb.toString();

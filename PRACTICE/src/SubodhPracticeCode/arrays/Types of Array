@@ -1,0 +1,35 @@
+===============
+Types of Array 
+===============
+1. Single Dimensional Array
+2. Multi Dimensional Array (Array of Arrays)
+Eg - 2D, 3D, 4D, 5D, .........
+=======================
+Multi Dimensional Array
+=======================
+Any array stored inside other array is known as Multi Dimensional Array.
+
+===================
+2 Dimensional Array
+===================
+Any single dimensional array stored inside another array is known as 2D array.
+
+=======================
+How to create 2D array?
+=======================
+1. using array literal
+
+datatype[][] variable = {{v1,v2,v3,...}, {v1,v2,v3,...}, ...};
+
+
+2. using new keyword
+
+datatype[][] variable = new datatype[outer_size][inner_array];
+
+===============
+Jagged Array
+===============
+A jagged array is an array of arrays such that member arrays can be of different sizes, i.e., we can create a 2-D array but with a variable number of columns in each row.
+
+Syntax - 
+datatype[][] variable = new datatype[outer_size][]; 

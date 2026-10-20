@@ -1,0 +1,32 @@
+String
+======================================================================
+1. It is a final class i.e. it cannot have any subclass.
+2. It is defined in java.lang package.
+3. It is used to create a immutable string object.
+4. This class implements 3 interfaces
+	=> CharSequence: It is used to represent the sequence of characters. It is implemented by String, StringBuffer, StringBuilder classes.
+	=> Comparable: It is used to compare the object. It returns 0 if both objects are equal, returns positive value if calling object is greater than the object passed as argument, returns negative value if calling object is smaller than the object passed as argument.
+	=> Serializable: It is used to serialize the object. Serialization is the process of converting an object into a byte stream. 
+	
+5. String class uses the concept of String Constant Pool present inside Heap Area.
+
+================================================
+How to create string object using String class?
+================================================
+1. using String Literal (String Constant Pool)
+
+String variable = "String Literal";
+Eg - String s1 = "apple";
+
+2. using new keyword (Heap Area as well as String Constant Pool)
+
+String variable = new String("String Literal");
+Eg -  String s1 = new String("apple"); 
+
+
+========================================
+How to make your own class as Immutable?
+========================================
+1. Make the class as final
+2. Make all data members as private and final
+3. Create only getter method 

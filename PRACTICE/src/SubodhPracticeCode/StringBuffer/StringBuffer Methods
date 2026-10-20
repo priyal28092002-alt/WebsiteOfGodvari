@@ -1,0 +1,37 @@
+STRINGBUFFER Class
+
+StringBuffer - StringBuffer class is very similar to String class but the object created using StringBuffer class are mutable & Thread-Safe.
+StringBuffer doesn't use the concept of String Constant Pool, all the objects will be created in Heap Area.
+
+StringBuffer (Mutable & Thread-Safe)
+a. Defined in java.lang.StringBuffer
+b. Mutable (can be changed without creating a new object)
+c. d. Thread-safe (synchronized methods)
+Better performance than String for frequent modifications
+
+Example:
+StringBuffer sb = new StringBuffer("Hello");
+sb.append(" World");  // Modifies existing object
+System.out.println(sb);  // Output: Hello World
+
+Methods of StringBuffer
+1. append(value) - returntype is StringBuffer
+This method is used to append (concatenate) the  values.
+
+2. insert(index, value) - returntype is StringBuffer
+This method is used to insert given value in the string at the specified index.
+
+3. delete(int start, int end) - returntype is StringBuffer
+This method is used to delete the characters present in the specified range.
+
+4. deleteCharAt(int index) - returntype is StringBuffer
+This method is used to remove the character given at the specified index.
+
+5. replace(int start, int end, StringBuffer) - returntype is StringBuffer
+This method is used to replace the set of characters from the given range with new value.
+
+6. reverse() - returntype of is StringBuffer
+This is used to reverse the string in the same object.
+
+7. toString() - returntype is String
+This is used to return the data of the stringbuffer in string format.
